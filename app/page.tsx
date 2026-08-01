@@ -395,9 +395,9 @@ export default function Home() {
         <div>
           <span className="eyebrow">PRIVATE SKIN JOURNAL</span>
           <h1>
-            See what changed.
+            See what changed
             <br />
-            <em>Remember what didn’t.</em>
+            <em>Remember what didn’t</em>
           </h1>
           <p>
             Build a private, repeatable photo record. DermWatch keeps every
