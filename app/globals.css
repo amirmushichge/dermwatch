@@ -2155,7 +2155,10 @@ footer {
 }
 
 .factor-meter i,
-.abcde-item.attention .factor-meter i,
+.abcde-item.attention .factor-meter i {
+  background: #d7aaa6;
+}
+
 .change-row i {
   background: #111;
 }

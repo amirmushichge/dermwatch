@@ -53,9 +53,9 @@ function fileToDataUrl(file: File): Promise<string> {
 
 function factorMeterColor(value: number) {
   const intensity = Math.min(1, Math.max(0, value));
-  const saturation = Math.round(10 + intensity * 72);
-  const lightness = Math.round(7 + intensity * 43);
-  return `hsl(4 ${saturation}% ${lightness}%)`;
+  const saturation = Math.round(42 + intensity * 43);
+  const lightness = Math.round(76 - intensity * 34);
+  return `hsl(5 ${saturation}% ${lightness}%)`;
 }
 
 function nextCheck(lesion: Lesion) {
