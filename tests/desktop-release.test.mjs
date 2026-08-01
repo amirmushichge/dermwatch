@@ -23,4 +23,5 @@ test("publishes both platform artifacts from GitHub Actions", () => {
   assert.match(workflow, /path: release\/DermWatch-\*\.dmg/);
   assert.match(workflow, /path: release\/DermWatch-\*\.exe/);
   assert.match(workflow, /needs: \[windows, macos, android\]/);
+  assert.match(workflow, /GH_REPO: \$\{\{ github\.repository \}\}/);
 });
