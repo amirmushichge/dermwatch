@@ -1599,10 +1599,65 @@ footer {
   line-height: 1.5;
 }
 
+.backup-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 22px 0;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.backup-summary > div {
+  display: grid;
+  gap: 3px;
+  padding: 18px;
+}
+
+.backup-summary > div + div {
+  border-left: 1px solid var(--line);
+}
+
+.backup-summary strong {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.backup-summary span,
+.backup-note {
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.backup-import {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 10px !important;
+  cursor: pointer;
+}
+
+.backup-import input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.backup-note {
+  margin: 14px 0 0;
+  line-height: 1.5;
+}
+
 @media (max-width: 1020px) {
   .service-state,
   .text-button {
     display: none;
+  }
+
+  .backup-button {
+    display: inline-flex;
   }
 
   .hero {

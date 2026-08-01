@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-const [manifest, capacitorConfig, workflow, packageJson] = await Promise.all([
+const [manifest, capacitorConfig, workflow, packageJson, androidBuild] = await Promise.all([
   readFile(
     new URL("../android/app/src/main/AndroidManifest.xml", import.meta.url),
     "utf8",
@@ -10,6 +10,7 @@ const [manifest, capacitorConfig, workflow, packageJson] = await Promise.all([
   readFile(new URL("../capacitor.config.ts", import.meta.url), "utf8"),
   readFile(new URL("../.github/workflows/release.yml", import.meta.url), "utf8"),
   readFile(new URL("../package.json", import.meta.url), "utf8").then(JSON.parse),
+  readFile(new URL("../android/app/build.gradle", import.meta.url), "utf8"),
 ]);
 
 test("Android keeps health photos private and requests no media permissions", () => {
@@ -17,6 +18,10 @@ test("Android keeps health photos private and requests no media permissions", ()
   assert.doesNotMatch(manifest, /READ_EXTERNAL_STORAGE|WRITE_EXTERNAL_STORAGE/);
   assert.doesNotMatch(manifest, /READ_MEDIA_IMAGES|CAMERA/);
   assert.match(capacitorConfig, /appId:\s*"com\.dermwatch\.local"/);
+  assert.equal(packageJson.dependencies["@capacitor/share"], "^8.0.1");
+  assert.equal(packageJson.version, "0.2.1");
+  assert.match(androidBuild, /versionCode 3/);
+  assert.match(androidBuild, /versionName "0\.2\.1"/);
 });
 
 test("Android release APK is signed and reproducibly built in CI", () => {

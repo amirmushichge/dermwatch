@@ -35,10 +35,14 @@ risk of accidental loss. A user can permanently remove all DermWatch data by
 deleting the folder shown above after closing the application.
 
 On Android, uninstalling DermWatch removes its private records and photos. The
-preview version does not yet provide export or restore, so users should not use
-it as their only long-term copy of an important photo history.
+application provides a manual JSON export and restore flow under **Backup**.
+Export a backup before uninstalling, resetting, or changing phones.
 
 ## Backups
 
-The current version does not create cloud backups. Users are responsible for
-backing up the data directory if they want a separate copy.
+The current version does not create automatic or cloud backups. **Backup >
+Export private backup** creates a portable JSON file containing records,
+measurements, analysis data, and the original photos. On Android, the system
+share sheet lets the user save that file to a destination they choose. Restore
+adds records without deleting existing data. Backup files contain sensitive
+health images and should be stored somewhere private.

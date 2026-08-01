@@ -4,6 +4,7 @@ import {
   Encoding,
   Filesystem,
 } from "@capacitor/filesystem";
+import { Share } from "@capacitor/share";
 import type { AnalysisResult } from "@/lib/analysis";
 
 export type Observation = {
@@ -55,6 +56,34 @@ type NativeStore = {
   lesions: StoredLesion[];
 };
 
+type BackupObservation = {
+  date: string;
+  originalName: string;
+  sizeMm?: number;
+  analysis: AnalysisResult;
+  dataUrl: string;
+};
+
+type BackupLesion = {
+  name: string;
+  location: string;
+  notes: string;
+  reminderDays: number;
+  observations: BackupObservation[];
+};
+
+type DermWatchBackup = {
+  format: "dermwatch-backup";
+  version: 1;
+  exportedAt: string;
+  lesions: BackupLesion[];
+};
+
+export type BackupSummary = {
+  records: number;
+  photos: number;
+};
+
 const INDEX_PATH = "dermwatch/index.json";
 const isNative = Capacitor.isNativePlatform();
 
@@ -93,6 +122,52 @@ function dataUrlParts(dataUrl: string) {
   if (!match) throw new Error("Unsupported image data");
   const extension = match[1] === "jpeg" ? "jpg" : match[1];
   return { base64: match[2], extension, mime: `image/${match[1]}` };
+}
+
+function fileToDataUrl(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result));
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(file);
+  });
+}
+
+function parseBackup(serialized: string): DermWatchBackup {
+  if (serialized.length > 512 * 1024 * 1024) {
+    throw new Error("Backup is larger than 512 MB");
+  }
+  const parsed = JSON.parse(serialized) as Partial<DermWatchBackup>;
+  if (
+    parsed.format !== "dermwatch-backup" ||
+    parsed.version !== 1 ||
+    !Array.isArray(parsed.lesions)
+  ) {
+    throw new Error("This is not a DermWatch backup");
+  }
+  if (parsed.lesions.length > 500) {
+    throw new Error("Backup contains too many records");
+  }
+
+  let photos = 0;
+  for (const lesion of parsed.lesions) {
+    if (!lesion || !Array.isArray(lesion.observations)) {
+      throw new Error("Backup record is incomplete");
+    }
+    photos += lesion.observations.length;
+    if (photos > 5000) throw new Error("Backup contains too many photos");
+    for (const observation of lesion.observations) {
+      dataUrlParts(String(observation.dataUrl || ""));
+      if (
+        !observation.analysis ||
+        typeof observation.analysis !== "object" ||
+        !Number.isFinite(Number(observation.analysis.version))
+      ) {
+        throw new Error("Backup contains invalid analysis data");
+      }
+    }
+  }
+  return parsed as DermWatchBackup;
 }
 
 function mimeFromPath(filePath: string) {
@@ -342,6 +417,124 @@ async function splitObservation(
   return hydrateLesion(newLesion);
 }
 
+async function exportBackup(): Promise<{ data: string; summary: BackupSummary }> {
+  const { lesions } = await getRecords();
+  let photos = 0;
+  const backupLesions: BackupLesion[] = [];
+
+  for (const lesion of lesions) {
+    const observations: BackupObservation[] = [];
+    for (const observation of lesion.observations) {
+      const file = await readObservationFile(observation);
+      observations.push({
+        date: observation.date,
+        originalName: observation.originalName,
+        ...(observation.sizeMm ? { sizeMm: observation.sizeMm } : {}),
+        analysis: observation.analysis,
+        dataUrl: await fileToDataUrl(file),
+      });
+      photos += 1;
+    }
+    backupLesions.push({
+      name: lesion.name,
+      location: lesion.location,
+      notes: lesion.notes,
+      reminderDays: lesion.reminderDays,
+      observations,
+    });
+  }
+
+  const backup: DermWatchBackup = {
+    format: "dermwatch-backup",
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    lesions: backupLesions,
+  };
+  return {
+    data: JSON.stringify(backup),
+    summary: { records: backupLesions.length, photos },
+  };
+}
+
+async function saveBackupFile(serialized: string) {
+  const date = new Date().toISOString().slice(0, 10);
+  const fileName = `DermWatch-backup-${date}.json`;
+  if (isNative) {
+    await Filesystem.writeFile({
+      path: fileName,
+      directory: Directory.Cache,
+      data: serialized,
+      encoding: Encoding.UTF8,
+      recursive: true,
+    });
+    const result = await Filesystem.getUri({
+      path: fileName,
+      directory: Directory.Cache,
+    });
+    await Share.share({
+      title: "DermWatch backup",
+      text: "Keep this private backup in a safe place.",
+      url: result.uri,
+      dialogTitle: "Save DermWatch backup",
+    });
+    return fileName;
+  }
+
+  const url = URL.createObjectURL(
+    new Blob([serialized], { type: "application/json" }),
+  );
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = fileName;
+  anchor.click();
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+  return fileName;
+}
+
+async function importBackup(serialized: string): Promise<BackupSummary> {
+  const backup = parseBackup(serialized);
+  const createdIds: string[] = [];
+  let photos = 0;
+  try {
+    for (const lesion of backup.lesions) {
+      const created = await createLesion({
+        name: cleanText(lesion.name, 80) || "Restored record",
+        location: cleanText(lesion.location, 100) || "Not specified",
+        notes: cleanText(lesion.notes, 600),
+        reminderDays: Math.min(
+          365,
+          Math.max(7, Number(lesion.reminderDays) || 30),
+        ),
+      });
+      createdIds.push(created.id);
+      for (const observation of lesion.observations) {
+        await addObservation(created.id, {
+          date: /^\d{4}-\d{2}-\d{2}$/.test(observation.date)
+            ? observation.date
+            : new Date().toISOString().slice(0, 10),
+          ...(Number(observation.sizeMm) > 0
+            ? { sizeMm: Math.min(100, Number(observation.sizeMm)) }
+            : {}),
+          fileName: cleanText(observation.originalName, 180) || "restored.jpg",
+          dataUrl: observation.dataUrl,
+          analysis: observation.analysis,
+        });
+        photos += 1;
+      }
+    }
+  } catch (error) {
+    for (const id of createdIds.reverse()) {
+      try {
+        await deleteLesion(id);
+      } catch {
+        // Continue rollback so one failed cleanup does not hide the import error.
+      }
+    }
+    throw error;
+  }
+  return { records: createdIds.length, photos };
+}
+
 export const storageClient = {
   isNative,
   resolveImageUrl,
@@ -352,4 +545,7 @@ export const storageClient = {
   readObservationFile,
   deleteLesion,
   splitObservation,
+  exportBackup,
+  saveBackupFile,
+  importBackup,
 };
