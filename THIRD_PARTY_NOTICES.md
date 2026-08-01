@@ -13,7 +13,6 @@ following third-party software and fonts.
 | Capacitor Core | 8.5.0 | MIT | https://capacitorjs.com/ |
 | Capacitor Filesystem | 8.1.2 | MIT | https://capacitorjs.com/docs/apis/filesystem |
 | Manrope | 5.2.7 package | SIL Open Font License 1.1 | https://fontsource.org/fonts/manrope |
-| Fraunces | 5.2.5 package | SIL Open Font License 1.1 | https://fontsource.org/fonts/fraunces |
 
 Electron distributions include additional license files for Electron, Chromium,
 Node.js, and their dependencies. In the unpacked Windows distribution these are

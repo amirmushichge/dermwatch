@@ -267,7 +267,8 @@ button {
 
 .hero h1 em {
   color: var(--green);
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: "Manrope", Arial, sans-serif;
+  font-style: normal;
   font-weight: 400;
 }
 
@@ -1921,9 +1922,10 @@ footer {
 
 .hero h1 em {
   color: #111;
-  font-family: "Fraunces", Georgia, serif;
+  font-family: "Manrope", Arial, sans-serif;
   font-size: 0.95em;
-  font-weight: 300;
+  font-style: normal;
+  font-weight: 400;
   letter-spacing: -0.04em;
   line-height: 1.05;
 }
