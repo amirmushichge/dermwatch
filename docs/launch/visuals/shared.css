@@ -10,13 +10,6 @@
   font-weight: 600;
 }
 
-@font-face {
-  font-family: "Fraunces";
-  src: url("assets/fraunces-300-italic.woff2") format("woff2");
-  font-weight: 300;
-  font-style: italic;
-}
-
 :root {
   --paper: #f4f4f1;
   --surface: #ffffff;
@@ -99,10 +92,10 @@ h1, h2, p { margin: 0; }
   letter-spacing: -0.065em;
 }
 
-.serif {
-  font-family: "Fraunces", serif;
-  font-weight: 300;
-  font-style: italic;
+.accent {
+  font-family: "Manrope", sans-serif;
+  font-weight: 400;
+  font-style: normal;
   line-height: 0.98;
   letter-spacing: -0.05em;
 }

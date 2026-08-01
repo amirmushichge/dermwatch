@@ -42,7 +42,8 @@ test("keeps the local privacy and storage contract explicit", async () => {
   assert.match(page, /factorMeterColor\(factor\.value\)/);
   assert.match(server, /splitObservationMatch/);
   assert.match(packageJson, /@fontsource\/manrope/);
-  assert.match(packageJson, /@fontsource\/fraunces/);
+  assert.doesNotMatch(packageJson, /@fontsource\/fraunces/);
+  assert.doesNotMatch(page, /Fraunces|Georgia|Times New Roman/);
   assert.match(server, /server\.listen\(port, host/);
   assert.match(server, /const defaultHost = "127\.0\.0\.1"/);
   assert.match(readme, /%APPDATA%\\DermWatch\\data/);
