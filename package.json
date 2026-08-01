@@ -1,8 +1,17 @@
 {
   "name": "dermwatch-local",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A private, local photo journal for tracking visible skin changes over time.",
-  "author": "Amir Mushich",
+  "author": "Pulse and Amir Mushich",
+  "contributors": [
+    {
+      "name": "Pulse"
+    },
+    {
+      "name": "Amir Mushich",
+      "url": "https://x.com/AmirMushich"
+    }
+  ],
   "main": "desktop/main.mjs",
   "private": true,
   "license": "MIT",
@@ -22,9 +31,17 @@
     "test": "npm run build && node --test tests/*.test.mjs && node --check desktop/main.mjs",
     "lint": "eslint .",
     "desktop:dir": "npm run build && electron-builder --dir",
-    "desktop:build": "npm run build && electron-builder --win nsis"
+    "desktop:build": "npm run desktop:build:windows",
+    "desktop:build:windows": "npm run build && electron-builder --win nsis --publish never",
+    "desktop:build:mac": "npm run build && electron-builder --mac dmg --universal --publish never",
+    "android:sync": "npm run build && cap sync android",
+    "android:open": "cap open android",
+    "android:apk:debug": "npm run android:sync && node scripts/build-android.mjs debug",
+    "android:apk:release": "npm run android:sync && node scripts/build-android.mjs release"
   },
   "devDependencies": {
+    "@capacitor/android": "8.5.0",
+    "@capacitor/cli": "8.5.0",
     "@eslint/js": "10.0.1",
     "@fontsource/fraunces": "5.2.5",
     "@fontsource/manrope": "5.2.7",
@@ -43,5 +60,9 @@
     "typescript-eslint": "8.65.0",
     "vite": "8.2.0"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "@capacitor/core": "8.5.0",
+    "@capacitor/filesystem": "8.1.2"
+  }
 }

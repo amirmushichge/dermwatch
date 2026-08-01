@@ -1,6 +1,6 @@
 appId: com.dermwatch.local
 productName: DermWatch
-artifactName: DermWatch-Setup-${version}.${ext}
+artifactName: DermWatch-${version}-${os}-${arch}.${ext}
 directories:
   output: release
   buildResources: build-resources
@@ -15,6 +15,13 @@ win:
     - target: nsis
       arch:
         - x64
+  icon: build-resources/icon.png
+mac:
+  target:
+    - target: dmg
+      arch:
+        - universal
+  category: public.app-category.healthcare-fitness
   icon: build-resources/icon.png
 nsis:
   oneClick: true
