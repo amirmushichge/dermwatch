@@ -39,6 +39,7 @@ test("keeps the local privacy and storage contract explicit", async () => {
   assert.match(analysis, /shapeDistance/);
   assert.match(analysis, /identity: "same" \| "uncertain" \| "different"/);
   assert.match(page, /Move latest photo to a separate record/);
+  assert.match(page, /factorMeterColor\(factor\.value\)/);
   assert.match(server, /splitObservationMatch/);
   assert.match(packageJson, /@fontsource\/manrope/);
   assert.match(packageJson, /@fontsource\/fraunces/);
