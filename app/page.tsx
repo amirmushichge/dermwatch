@@ -51,6 +51,13 @@ function fileToDataUrl(file: File): Promise<string> {
   });
 }
 
+function factorMeterColor(value: number) {
+  const intensity = Math.min(1, Math.max(0, value));
+  const saturation = Math.round(10 + intensity * 72);
+  const lightness = Math.round(7 + intensity * 43);
+  return `hsl(4 ${saturation}% ${lightness}%)`;
+}
+
 function nextCheck(lesion: Lesion) {
   const latest = [...lesion.observations].sort((a, b) =>
     b.date.localeCompare(a.date),
@@ -669,6 +676,7 @@ export default function Home() {
                               <i
                                 style={{
                                   width: formatPercent(factor.value),
+                                  backgroundColor: factorMeterColor(factor.value),
                                 }}
                               />
                             </div>
