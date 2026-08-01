@@ -6,7 +6,7 @@ DermWatch
 
 ## One-line description
 
-A private desktop photo journal that helps people monitor visible changes in
+A private local photo journal that helps people monitor visible changes in
 moles over time without uploading their images.
 
 ## Short description
@@ -27,6 +27,8 @@ cancer diagnosis system.
 - Computer vision
 - Open source
 - Windows
+- macOS
+- Android
 
 ## Price
 
@@ -40,6 +42,20 @@ https://github.com/amirmushichge/dermwatch/releases/latest
 
 https://github.com/amirmushichge/dermwatch
 
+## Authors and provenance
+
+The current adaptation is by [Pulse](https://x.com/youraipulse) and
+[Amir Mushich](https://x.com/AmirMushich). It was inspired by
+[OpenDerm](https://openderm.github.io/) by
+[Marion Lepert](https://x.com/marionlepert), but does not redistribute OpenDerm
+code, hardware files, datasets, or model weights.
+
+DermWatch currently bundles no pretrained ML model and calls no cloud inference
+service. Full details are available in the repository's
+[credits](https://github.com/amirmushichge/dermwatch/blob/main/CREDITS.md) and
+[technical transparency](https://github.com/amirmushichge/dermwatch/blob/main/TECHNICAL_TRANSPARENCY.md)
+documents.
+
 ## Suggested call to action
 
-Download for Windows
+Download for Windows, macOS, or Android

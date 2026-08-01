@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="shared.css" />
+    <title>DermWatch transparency</title>
+    <style>
+      .hero { margin-top: 74px; display: grid; grid-template-columns: 1.45fr 0.75fr; gap: 72px; align-items: start; }
+      .headline { font-size: 108px; }
+      .status { padding: 30px; min-height: 300px; display: flex; flex-direction: column; justify-content: space-between; }
+      .status h2 { font-size: 31px; line-height: 1.05; letter-spacing: -0.05em; }
+      .status p { color: var(--muted); font-size: 17px; line-height: 1.3; letter-spacing: -0.04em; }
+      .truths { margin-top: 70px; display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--line); border-radius: 22px; overflow: hidden; background: var(--surface); }
+      .truth { min-height: 155px; padding: 26px; border-right: 1px solid var(--line); }
+      .truth:last-child { border-right: 0; }
+      .truth h2 { margin-top: 26px; font-size: 25px; letter-spacing: -0.05em; }
+      .truth p { margin-top: 12px; color: var(--muted); font-size: 15px; line-height: 1.25; letter-spacing: -0.04em; }
+    </style>
+  </head>
+  <body>
+    <main class="frame">
+      <header class="topbar"><span>DERMWATCH</span><span class="meta">03 / TECHNICAL TRANSPARENCY</span></header>
+      <section class="hero">
+        <div>
+          <div class="eyebrow">WHAT IT IS — AND ISN'T</div>
+          <h1 class="headline">No hidden AI.<br /><span class="serif">Not a diagnosis.</span></h1>
+        </div>
+        <article class="card status">
+          <span class="tag">EXPERIMENTAL</span>
+          <h2>Measures visible image features.</h2>
+          <p>A concerning spot should be assessed by a qualified clinician, regardless of the app result.</p>
+        </article>
+      </section>
+      <section class="truths">
+        <article class="truth"><span class="square"></span><h2>No LLM</h2><p>No text model is involved in photo analysis.</p></article>
+        <article class="truth"><span class="square"></span><h2>No pretrained classifier</h2><p>No medical model or model weights are bundled.</p></article>
+        <article class="truth"><span class="square"></span><h2>Local heuristics</h2><p>Deterministic measurements run on this computer.</p></article>
+      </section>
+      <footer class="footer"><span>PULSE × @AMIRMUSHICH</span><span>NOT A MEDICAL DEVICE</span></footer>
+    </main>
+  </body>
+</html>
