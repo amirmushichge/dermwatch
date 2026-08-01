@@ -64,6 +64,7 @@ currently distributed directly from GitHub rather than Google Play.
 - checks whether follow-up photos likely show the same spot;
 - compares visible changes between observations;
 - keeps a chronological photo history and reminder interval;
+- exports and restores a private JSON backup containing records and photos;
 - stores all records locally.
 
 ## Privacy
@@ -80,9 +81,11 @@ macOS:   ~/Library/Application Support/DermWatch/data
 Android: private app storage (not visible to other apps)
 ```
 
-Desktop uninstall does not delete its data folder automatically. Uninstalling
-the Android app deletes its private records, so export/backup support must be
-added before Android is treated as a stable release. See [PRIVACY.md](PRIVACY.md).
+Desktop uninstall does not delete its data folder automatically. Android
+uninstall removes its private records, so use **Backup > Export private backup**
+before uninstalling or changing phones. Restore the JSON backup from the same
+screen. The backup contains health photos and should be kept private. See
+[PRIVACY.md](PRIVACY.md).
 
 ## How the analysis works
 
@@ -119,6 +122,7 @@ Open `http://localhost:3000`.
 npm ci
 npm test
 npm run desktop:build:windows
+npm run desktop:smoke:packaged
 ```
 
 On macOS, build the universal DMG with:
@@ -127,6 +131,7 @@ On macOS, build the universal DMG with:
 npm ci
 npm test
 npm run desktop:build:mac
+npm run desktop:smoke:packaged
 ```
 
 Installers are written to `release/`. GitHub Actions builds Windows, macOS, and

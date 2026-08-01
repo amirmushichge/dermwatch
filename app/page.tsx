@@ -117,6 +117,8 @@ export default function Home() {
   const [showNewLesion, setShowNewLesion] = useState(false);
   const [showUpload, setShowUpload] = useState(false);
   const [showPrivacy, setShowPrivacy] = useState(false);
+  const [showBackup, setShowBackup] = useState(false);
+  const [backupBusy, setBackupBusy] = useState(false);
   const [saving, setSaving] = useState(false);
   const [newLesion, setNewLesion] = useState({
     name: "",
@@ -361,6 +363,48 @@ export default function Home() {
     }
   }
 
+  async function exportBackup() {
+    setBackupBusy(true);
+    try {
+      const backup = await storageClient.exportBackup();
+      const fileName = await storageClient.saveBackupFile(backup.data);
+      setNotice(
+        `${backup.summary.records} records and ${backup.summary.photos} photos exported to ${fileName}.`,
+      );
+    } catch {
+      setNotice("Could not create the backup on this device.");
+    } finally {
+      setBackupBusy(false);
+    }
+  }
+
+  async function restoreBackup(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) return;
+    if (
+      !window.confirm(
+        "Restore records from this backup? Existing records stay unchanged.",
+      )
+    ) {
+      return;
+    }
+
+    setBackupBusy(true);
+    try {
+      const summary = await storageClient.importBackup(await file.text());
+      await refresh();
+      setShowBackup(false);
+      setNotice(
+        `${summary.records} records and ${summary.photos} photos restored.`,
+      );
+    } catch {
+      setNotice("Could not restore this backup. Choose a DermWatch JSON backup.");
+    } finally {
+      setBackupBusy(false);
+    }
+  }
+
   return (
     <main className="app-shell">
       <header className="topbar">
@@ -372,6 +416,12 @@ export default function Home() {
           <small>local</small>
         </div>
         <div className="header-actions">
+          <button
+            className="text-button backup-button"
+            onClick={() => setShowBackup(true)}
+          >
+            Backup
+          </button>
           <button className="text-button" onClick={() => setShowPrivacy(true)}>
             Photo guide
           </button>
@@ -1136,6 +1186,61 @@ export default function Home() {
             >
               Got it
             </button>
+          </section>
+        </div>
+      )}
+
+      {showBackup && (
+        <div className="modal-backdrop" role="presentation">
+          <section
+            className="modal-card compact backup-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="backup-title"
+          >
+            <button
+              className="modal-close"
+              onClick={() => setShowBackup(false)}
+              aria-label="Close"
+            >
+              ×
+            </button>
+            <span className="eyebrow">LOCAL BACKUP</span>
+            <h2 id="backup-title">Keep your records portable</h2>
+            <p className="modal-intro">
+              Export one private JSON file containing every record, photo and
+              measurement. Store it somewhere only you can access.
+            </p>
+            <div className="backup-summary" aria-label="Backup contents">
+              <div>
+                <strong>{lesions.length}</strong>
+                <span>records</span>
+              </div>
+              <div>
+                <strong>{totalPhotos}</strong>
+                <span>photos</span>
+              </div>
+            </div>
+            <button
+              className="primary-button wide"
+              onClick={exportBackup}
+              disabled={backupBusy || !serviceOnline}
+            >
+              {backupBusy ? "Preparing backup…" : "Export private backup"}
+            </button>
+            <label className="secondary-button backup-import">
+              Restore from backup
+              <input
+                type="file"
+                accept="application/json,.json"
+                onChange={restoreBackup}
+                disabled={backupBusy || !serviceOnline}
+              />
+            </label>
+            <p className="backup-note">
+              Restoring adds the backup records without deleting anything
+              already on this device.
+            </p>
           </section>
         </div>
       )}

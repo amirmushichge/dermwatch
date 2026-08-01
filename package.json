@@ -1,6 +1,6 @@
 {
   "name": "dermwatch-local",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A private, local photo journal for tracking visible skin changes over time.",
   "author": "Pulse and Amir Mushich",
   "contributors": [
@@ -30,10 +30,12 @@
     "local-api": "node server.mjs",
     "test": "npm run build && node --test tests/*.test.mjs && node --check desktop/main.mjs",
     "lint": "eslint .",
+    "release:verify-version": "node scripts/verify-release-version.mjs",
     "desktop:dir": "npm run build && electron-builder --dir",
     "desktop:build": "npm run desktop:build:windows",
     "desktop:build:windows": "npm run build && electron-builder --win nsis --publish never",
     "desktop:build:mac": "npm run build && electron-builder --mac dmg --universal --publish never",
+    "desktop:smoke:packaged": "node scripts/smoke-packaged.mjs",
     "android:sync": "npm run build && cap sync android",
     "android:open": "cap open android",
     "android:apk:debug": "npm run android:sync && node scripts/build-android.mjs debug",
@@ -62,6 +64,7 @@
   "type": "module",
   "dependencies": {
     "@capacitor/core": "8.5.0",
-    "@capacitor/filesystem": "8.1.2"
+    "@capacitor/filesystem": "8.1.2",
+    "@capacitor/share": "^8.0.1"
   }
 }

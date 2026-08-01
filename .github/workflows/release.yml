@@ -20,9 +20,11 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      - run: npm run release:verify-version
       - run: npm run lint
       - run: npm test
       - run: npm run desktop:build:windows
+      - run: npm run desktop:smoke:packaged
       - uses: actions/upload-artifact@v4
         with:
           name: windows-installer
@@ -38,9 +40,11 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      - run: npm run release:verify-version
       - run: npm run lint
       - run: npm test
       - run: npm run desktop:build:mac
+      - run: npm run desktop:smoke:packaged
       - uses: actions/upload-artifact@v4
         with:
           name: macos-installer
@@ -63,6 +67,7 @@ jobs:
       - uses: android-actions/setup-android@v3
       - run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
       - run: npm ci
+      - run: npm run release:verify-version
       - run: npm run lint
       - run: npm test
       - name: Restore Android signing key

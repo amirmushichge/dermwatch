@@ -51,3 +51,5 @@ next-env.d.ts
 # desktop packaging
 /release/
 /ci-artifacts/
+/release-artifacts/
+/output/

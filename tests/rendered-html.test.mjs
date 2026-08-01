@@ -50,6 +50,11 @@ test("keeps the local privacy and storage contract explicit", async () => {
   assert.match(readme, /%APPDATA%\\DermWatch\\data/);
   assert.match(storageClient, /resolveApiUrl/);
   assert.match(storageClient, /Directory\.Data/);
+  assert.match(storageClient, /format: "dermwatch-backup"/);
+  assert.match(storageClient, /for \(const id of createdIds\.reverse\(\)\)/);
+  assert.match(storageClient, /Share\.share/);
+  assert.match(page, /Export private backup/);
+  assert.match(page, /Restore from backup/);
   assert.match(server, /DERMWATCH_DATA_DIR/);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
 });

@@ -12,6 +12,7 @@ following third-party software and fonts.
 | React DOM | 19.2.6 | MIT | https://react.dev/ |
 | Capacitor Core | 8.5.0 | MIT | https://capacitorjs.com/ |
 | Capacitor Filesystem | 8.1.2 | MIT | https://capacitorjs.com/docs/apis/filesystem |
+| Capacitor Share | 8.0.1 | MIT | https://capacitorjs.com/docs/apis/share |
 | Manrope | 5.2.7 package | SIL Open Font License 1.1 | https://fontsource.org/fonts/manrope |
 
 Electron distributions include additional license files for Electron, Chromium,

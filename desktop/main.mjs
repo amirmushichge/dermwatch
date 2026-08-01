@@ -21,6 +21,9 @@ let storageServer;
 let mainWindow;
 const smokeTest = process.argv.includes("--smoke-test");
 if (smokeTest) app.disableHardwareAcceleration();
+if (smokeTest && process.env.DERMWATCH_SMOKE_DATA_DIR) {
+  app.setPath("userData", path.resolve(process.env.DERMWATCH_SMOKE_DATA_DIR));
+}
 
 function closeServer(server) {
   return new Promise((resolve) => {
@@ -150,6 +153,37 @@ async function openMainWindow() {
         check();
       })
     `);
+    if (process.env.DERMWATCH_SMOKE_CREATE_RECORD === "1") {
+      await fetch(`${storage.url}/api/lesions`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Origin: localApp.url,
+        },
+        body: JSON.stringify({
+          name: "Packaged smoke record",
+          location: "Test device",
+          reminderDays: 30,
+        }),
+      });
+    }
+    const backupUiLoaded = await mainWindow.webContents.executeJavaScript(`
+      new Promise((resolve) => {
+        const backupButton = [...document.querySelectorAll("button")].find(
+          (button) => button.textContent.trim() === "Backup",
+        );
+        if (!backupButton) return resolve(false);
+        backupButton.click();
+        const deadline = Date.now() + 3000;
+        const check = () => {
+          if (document.body.innerText.includes("Export private backup"))
+            resolve(true);
+          else if (Date.now() >= deadline) resolve(false);
+          else setTimeout(check, 100);
+        };
+        check();
+      })
+    `);
     const [rendererState, health, records] = await Promise.all([
       mainWindow.webContents.executeJavaScript(`
         (async () => {
@@ -186,11 +220,14 @@ async function openMainWindow() {
         rendererState.bodyText.includes("DermWatch") &&
         rendererState.fetchOk === true &&
         health.ok === true &&
-        Array.isArray(records.lesions),
+        Array.isArray(records.lesions) &&
+        backupUiLoaded === true,
       uiLoaded: rendererState.bodyText.includes("DermWatch"),
+      backupUiLoaded,
       uiStorageOnline: rendererState.fetchOk === true,
       storageOnline: health.ok === true,
       recordsReadable: Array.isArray(records.lesions),
+      recordCount: Array.isArray(records.lesions) ? records.lesions.length : -1,
       renderer: rendererState,
     };
     const screenshotPath = process.env.DERMWATCH_SMOKE_SCREENSHOT;
