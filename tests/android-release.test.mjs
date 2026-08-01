@@ -19,12 +19,15 @@ test("Android keeps health photos private and requests no media permissions", ()
   assert.match(capacitorConfig, /appId:\s*"com\.dermwatch\.local"/);
 });
 
-test("Android preview APK is reproducibly built in CI", () => {
+test("Android release APK is signed and reproducibly built in CI", () => {
   assert.equal(
-    packageJson.scripts["android:apk:debug"],
-    "npm run android:sync && node scripts/build-android.mjs debug",
+    packageJson.scripts["android:apk:release"],
+    "npm run android:sync && node scripts/build-android.mjs release",
   );
   assert.match(workflow, /runs-on: ubuntu-latest/);
-  assert.match(workflow, /npm run android:apk:debug/);
-  assert.match(workflow, /android\/app\/build\/outputs\/apk\/debug\/app-debug\.apk/);
+  assert.match(workflow, /secrets\.ANDROID_KEYSTORE_BASE64/);
+  assert.match(workflow, /secrets\.ANDROID_KEYSTORE_PASSWORD/);
+  assert.match(workflow, /npm run android:apk:release/);
+  assert.match(workflow, /apksigner" verify --verbose --print-certs/);
+  assert.match(workflow, /android\/app\/build\/outputs\/apk\/release\/app-release\.apk/);
 });
