@@ -5,7 +5,13 @@ import tseslint from "typescript-eslint";
 
 export default tseslint.config(
   {
-    ignores: ["dist/**", "release/**", "node_modules/**", ".runtime/**"],
+    ignores: [
+      "dist/**",
+      "release/**",
+      "node_modules/**",
+      ".runtime/**",
+      "android/**",
+    ],
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,

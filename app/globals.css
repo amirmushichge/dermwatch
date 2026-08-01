@@ -1410,6 +1410,44 @@ footer {
   font-size: 9px;
 }
 
+.capture-zone {
+  display: grid;
+  min-height: 72px;
+  grid-template-columns: 34px 1fr;
+  align-items: center;
+  column-gap: 12px;
+  margin-top: 10px;
+  padding: 14px 18px;
+  border: 1px solid var(--ink);
+  border-radius: 13px;
+  background: var(--ink);
+  color: #fff;
+  cursor: pointer;
+}
+
+.capture-zone input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.capture-zone > span {
+  grid-row: 1 / 3;
+  font-size: 27px;
+  font-weight: 400;
+}
+
+.capture-zone strong,
+.capture-zone small {
+  display: block;
+}
+
+.capture-zone small {
+  color: #bdbdb7;
+  font-size: 10px;
+}
+
 .drop-icon {
   display: grid;
   width: 42px;

@@ -10,46 +10,10 @@ import {
   compareAnalyses,
   formatPercent,
 } from "@/lib/analysis";
-
-function resolveApiUrl() {
-  const fallback = "http://127.0.0.1:8788";
-  if (typeof window === "undefined") return fallback;
-
-  const candidate = new URLSearchParams(window.location.search).get("api");
-  if (!candidate) return fallback;
-
-  try {
-    const url = new URL(candidate);
-    const isLoopback =
-      url.protocol === "http:" &&
-      (url.hostname === "127.0.0.1" || url.hostname === "localhost");
-    return isLoopback ? url.origin : fallback;
-  } catch {
-    return fallback;
-  }
-}
-
-const API_URL = resolveApiUrl();
-
-type Observation = {
-  id: string;
-  date: string;
-  createdAt: string;
-  imageUrl: string;
-  originalName: string;
-  sizeMm?: number;
-  analysis: AnalysisResult;
-};
-
-type Lesion = {
-  id: string;
-  name: string;
-  location: string;
-  notes: string;
-  reminderDays: number;
-  createdAt: string;
-  observations: Observation[];
-};
+import {
+  type Lesion,
+  storageClient,
+} from "@/lib/storage-client";
 
 type UploadDraft = {
   file: File;
@@ -160,9 +124,7 @@ export default function Home() {
 
   async function refresh() {
     try {
-      const response = await fetch(`${API_URL}/api/records`);
-      if (!response.ok) throw new Error("Local storage service unavailable");
-      const payload = (await response.json()) as { lesions: Lesion[] };
+      const payload = await storageClient.getRecords();
       setLesions(payload.lesions);
       setSelectedId((current) => current || payload.lesions[0]?.id || "");
       setUploadTarget((current) => current || payload.lesions[0]?.id || "");
@@ -201,22 +163,12 @@ export default function Home() {
     void (async () => {
       try {
         for (const { lesion, observation } of pending) {
-          const imageResponse = await fetch(
-            `${API_URL}${observation.imageUrl}`,
-          );
-          if (!imageResponse.ok) continue;
-          const blob = await imageResponse.blob();
-          const file = new File([blob], observation.originalName || "image.jpg", {
-            type: blob.type || "image/jpeg",
-          });
+          const file = await storageClient.readObservationFile(observation);
           const analysis = await analyzeImage(file);
-          await fetch(
-            `${API_URL}/api/lesions/${lesion.id}/observations/${observation.id}/analysis`,
-            {
-              method: "PATCH",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ analysis }),
-            },
+          await storageClient.updateAnalysis(
+            lesion.id,
+            observation.id,
+            analysis,
           );
         }
         await refresh();
@@ -275,13 +227,7 @@ export default function Home() {
     }
     setSaving(true);
     try {
-      const response = await fetch(`${API_URL}/api/lesions`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newLesion),
-      });
-      if (!response.ok) throw new Error();
-      const created = (await response.json()) as Lesion;
+      const created = await storageClient.createLesion(newLesion);
       await refresh();
       setSelectedId(created.id);
       setUploadTarget(created.id);
@@ -352,21 +298,13 @@ export default function Home() {
     try {
       for (const draft of ready) {
         const dataUrl = await fileToDataUrl(draft.file);
-        const response = await fetch(
-          `${API_URL}/api/lesions/${uploadTarget}/observations`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              date: draft.date,
-              sizeMm: draft.sizeMm ? Number(draft.sizeMm) : undefined,
-              fileName: draft.file.name,
-              dataUrl,
-              analysis: draft.analysis,
-            }),
-          },
-        );
-        if (!response.ok) throw new Error();
+        await storageClient.addObservation(uploadTarget, {
+          date: draft.date,
+          sizeMm: draft.sizeMm ? Number(draft.sizeMm) : undefined,
+          fileName: draft.file.name,
+          dataUrl,
+          analysis: draft.analysis!,
+        });
       }
       drafts.forEach((draft) => URL.revokeObjectURL(draft.preview));
       setDrafts([]);
@@ -379,7 +317,7 @@ export default function Home() {
           : "Photo saved.",
       );
     } catch {
-      setNotice("Could not save photos to drive F:.");
+      setNotice("Could not save photos on this device.");
     } finally {
       setSaving(false);
     }
@@ -388,10 +326,7 @@ export default function Home() {
   async function deleteLesion(id: string) {
     if (!window.confirm("Delete this record and all of its photos?")) return;
     try {
-      const response = await fetch(`${API_URL}/api/lesions/${id}`, {
-        method: "DELETE",
-      });
-      if (!response.ok) throw new Error();
+      await storageClient.deleteLesion(id);
       setSelectedId("");
       await refresh();
       setNotice("Record deleted.");
@@ -405,12 +340,10 @@ export default function Home() {
     const latest = orderedObservations.at(-1)!;
     setSaving(true);
     try {
-      const response = await fetch(
-        `${API_URL}/api/lesions/${selected.id}/observations/${latest.id}/split`,
-        { method: "POST" },
+      const created = await storageClient.splitObservation(
+        selected.id,
+        latest.id,
       );
-      if (!response.ok) throw new Error();
-      const created = (await response.json()) as Lesion;
       await refresh();
       setSelectedId(created.id);
       setNotice("The latest photo was moved to a separate record.");
@@ -576,7 +509,7 @@ export default function Home() {
                     <span className="thumbnail">
                       {last ? (
                         <img
-                          src={`${API_URL}${last.imageUrl}`}
+                          src={storageClient.resolveImageUrl(last.imageUrl)}
                           alt=""
                           loading="lazy"
                         />
@@ -767,7 +700,7 @@ export default function Home() {
                       </div>
                       <div className="scan-image">
                         <img
-                          src={`${API_URL}${observation.imageUrl}`}
+                          src={storageClient.resolveImageUrl(observation.imageUrl)}
                           alt={`${selected.name}, ${localDate(observation.date)}`}
                         />
                         <span className="focus-frame" />
@@ -1041,6 +974,20 @@ export default function Home() {
                 <strong>Choose one or more photos</strong>
                 <small>JPEG, PNG or WebP · 1200 × 1200 px or larger</small>
             </label>
+
+            {storageClient.isNative && (
+              <label className="capture-zone">
+                <input
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  onChange={chooseFiles}
+                />
+                <span>＋</span>
+                <strong>Take a photo</strong>
+                <small>Use the rear camera and keep the phone steady</small>
+              </label>
+            )}
 
             {drafts.length > 0 && (
               <div className="draft-list">

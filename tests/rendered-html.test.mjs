@@ -21,15 +21,16 @@ test("builds a self-contained DermWatch application shell", async () => {
 });
 
 test("keeps the local privacy and storage contract explicit", async () => {
-  const [page, analysis, server, readme, packageJson] = await Promise.all([
+  const [page, analysis, storageClient, server, readme, packageJson] = await Promise.all([
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../lib/analysis.ts", import.meta.url), "utf8"),
+    readFile(new URL("../lib/storage-client.ts", import.meta.url), "utf8"),
     readFile(new URL("../server.mjs", import.meta.url), "utf8"),
     readFile(new URL("../README.md", import.meta.url), "utf8"),
     readFile(new URL("../package.json", import.meta.url), "utf8"),
   ]);
 
-  assert.match(page, /127\.0\.0\.1:8788/);
+  assert.match(storageClient, /127\.0\.0\.1:8788/);
   assert.match(page, /Photos never leave this computer/i);
   assert.match(page, /Not a diagnosis/);
   assert.match(page, /SINGLE-PHOTO SCREEN/);
@@ -44,7 +45,8 @@ test("keeps the local privacy and storage contract explicit", async () => {
   assert.match(server, /server\.listen\(port, host/);
   assert.match(server, /const defaultHost = "127\.0\.0\.1"/);
   assert.match(readme, /%APPDATA%\\DermWatch\\data/);
-  assert.match(page, /resolveApiUrl/);
+  assert.match(storageClient, /resolveApiUrl/);
+  assert.match(storageClient, /Directory\.Data/);
   assert.match(server, /DERMWATCH_DATA_DIR/);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
 });
