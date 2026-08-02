@@ -33,8 +33,10 @@ export type ChangeResult = {
   score: number;
   level: "stable" | "noticeable" | "substantial";
   reliability: "good" | "low";
+  mode: "same-day-retake" | "follow-up";
   identity: "same" | "uncertain" | "different";
   identityScore?: number;
+  captureIssues: string[];
   message: string;
   factors: Array<{
     key: string;
@@ -426,7 +428,10 @@ export async function analyzeImage(file: File): Promise<AnalysisResult> {
   const qualityScore =
     sharpness * 0.48 + exposure * 0.25 + sourceResolution * 0.27;
   const qualityStatus =
-    qualityScore >= 0.68 && segmentationConfidence >= 0.45
+    qualityScore >= 0.68 &&
+    sharpness >= 0.65 &&
+    segmentationConfidence >= 0.55 &&
+    centerOffset <= 0.3
       ? "good"
       : qualityScore >= 0.42 && segmentationConfidence >= 0.25
         ? "review"
@@ -511,7 +516,9 @@ export function compareAnalyses(
   current: AnalysisResult,
   previousSizeMm?: number,
   currentSizeMm?: number,
+  daysBetweenPhotos?: number,
 ): ChangeResult {
+  const mode = daysBetweenPhotos === 0 ? "same-day-retake" : "follow-up";
   let identity: ChangeResult["identity"] = "uncertain";
   let identityScore: number | undefined;
   if (previous.appearance && current.appearance) {
@@ -595,16 +602,62 @@ export function compareAnalyses(
     previous.segmentation.confidence,
     current.segmentation.confidence,
   );
+  const scaleRatio =
+    Math.max(
+      previous.segmentation.diameterFraction,
+      current.segmentation.diameterFraction,
+    ) /
+    Math.max(
+      0.001,
+      Math.min(
+        previous.segmentation.diameterFraction,
+        current.segmentation.diameterFraction,
+      ),
+    );
+  const captureIssues: string[] = [];
+  if (Math.min(previous.quality.sharpness, current.quality.sharpness) < 65) {
+    captureIssues.push("one photo is not sharp enough");
+  }
+  if (
+    Math.min(
+      previous.segmentation.confidence,
+      current.segmentation.confidence,
+    ) < 55
+  ) {
+    captureIssues.push("spot detection is not stable enough");
+  }
+  if (scaleRatio > 1.28) {
+    captureIssues.push("camera distance or crop changed");
+  }
+  if (
+    Math.max(
+      previous.segmentation.centerOffset,
+      current.segmentation.centerOffset,
+    ) > 0.3 ||
+    Math.abs(
+      previous.segmentation.centerOffset - current.segmentation.centerOffset,
+    ) > 0.16
+  ) {
+    captureIssues.push("the spot is framed differently");
+  }
+  const captureLimited =
+    captureIssues.length > 0 ||
+    previous.quality.status !== "good" ||
+    current.quality.status !== "good";
   const reliability =
+    mode === "follow-up" &&
     identity === "same" &&
-    qualityFloor >= 48 &&
-    previous.quality.status !== "retake" &&
-    current.quality.status !== "retake"
+    qualityFloor >= 55 &&
+    previous.quality.status === "good" &&
+    current.quality.status === "good" &&
+    captureIssues.length === 0
       ? "good"
       : "low";
 
   const level =
-    identity === "different"
+    mode === "same-day-retake"
+      ? "stable"
+      : identity === "different"
       ? "substantial"
       : score < 0.24
         ? "stable"
@@ -612,12 +665,16 @@ export function compareAnalyses(
           ? "noticeable"
           : "substantial";
   const message =
-    identity === "different"
+    mode === "same-day-retake"
+      ? "These photos were taken on the same day. Any difference is treated as capture variation, not biological change. Keep the sharper, better-centered image as the baseline and repeat later under matched conditions."
+      : captureLimited
+        ? `The photos are not comparable enough${
+            captureIssues.length ? `: ${captureIssues.join(", ")}` : ""
+          }. Retake the photo using the same light, distance and camera position.`
+      : identity === "different"
       ? "These photos likely show different moles: their shape and internal pattern do not match. Change tracking has stopped. Move the latest photo to a separate record."
       : identity === "uncertain"
         ? "The system could not confirm that both photos show the same mole. Retake the photo at the same distance, angle and lighting."
-        : reliability === "low"
-        ? "Image quality or framing differs. Retake the photo using the same light, distance and camera position."
       : level === "stable"
         ? "No significant visual change was measured between the two latest photos. This does not rule out medical changes."
         : level === "noticeable"
@@ -628,8 +685,10 @@ export function compareAnalyses(
     score,
     level,
     reliability,
+    mode,
     identity,
     identityScore,
+    captureIssues,
     message,
     factors,
   };
@@ -640,14 +699,16 @@ export function assessSingleImage(
   sizeMm?: number,
 ): SingleImageAssessment {
   if (
-    analysis.quality.status === "retake" ||
-    analysis.segmentation.confidence < 30
+    analysis.quality.status !== "good" ||
+    analysis.quality.sharpness < 65 ||
+    analysis.segmentation.confidence < 55 ||
+    analysis.segmentation.centerOffset > 0.3
   ) {
     return {
       level: "retake",
       headline: "This photo is not reliable enough",
       message:
-        "The visual check cannot separate the mole from its background with enough confidence. Retake it in even light without glare or digital zoom.",
+        "The photo is not consistent enough for shape or border measurements. Retake it in even light, center the spot inside the guide, hold the camera parallel to the skin and avoid glare or digital zoom.",
       action: "Retake the photo",
       flaggedCount: 0,
       factors: [
@@ -689,7 +750,7 @@ export function assessSingleImage(
   const border = clamp(analysis.features.borderIrregularity / 0.7);
   const color = clamp(analysis.features.colorVariation / 0.35);
   const diameter = sizeMm ? clamp((sizeMm - 3) / 5) : undefined;
-  const threshold = 0.58;
+  const threshold = 0.72;
 
   const factors: SingleImageAssessment["factors"] = [
     {
@@ -699,8 +760,8 @@ export function assessSingleImage(
       state: asymmetry >= threshold ? "attention" : "clear",
       detail:
         asymmetry >= threshold
-          ? "the two sides look visibly different"
-          : "no pronounced asymmetry was flagged",
+          ? "higher asymmetry measurement in this photo"
+          : "lower asymmetry measurement in this photo",
     },
     {
       code: "B",
@@ -709,8 +770,8 @@ export function assessSingleImage(
       state: border >= threshold ? "attention" : "clear",
       detail:
         border >= threshold
-          ? "the border looks irregular"
-          : "no pronounced border irregularity was flagged",
+          ? "higher edge-complexity measurement; sensitive to focus and shadow"
+          : "lower edge-complexity measurement in this photo",
     },
     {
       code: "C",
@@ -719,8 +780,8 @@ export function assessSingleImage(
       state: color >= threshold ? "attention" : "clear",
       detail:
         color >= threshold
-          ? "multiple shades appear within the spot"
-          : "no pronounced color variation was flagged",
+          ? "higher color-variation measurement; sensitive to lighting"
+          : "lower color-variation measurement in this photo",
     },
     {
       code: "D",
@@ -750,25 +811,18 @@ export function assessSingleImage(
   const flaggedCount = factors.filter(
     (factor) => factor.state === "attention",
   ).length;
-  const level = flaggedCount >= 2 ? "attention" : "baseline";
+  const level = flaggedCount >= 3 ? "attention" : "baseline";
 
   return {
     level,
     flaggedCount,
     headline:
       level === "attention"
-        ? "Visual features warrant an in-person check"
-        : flaggedCount === 1
-          ? "One visual feature was flagged"
-          : "No pronounced visual features were flagged",
+        ? "Several photo measurements are elevated"
+        : "Baseline recorded",
     message:
-      level === "attention"
-        ? `${flaggedCount} available features were flagged. This does not mean cancer, but an in-person dermatologist check is sensible, especially if the spot is new, growing, itching or bleeding.`
-        : "This visual check cannot confirm that a mole is benign. Keep the photo as a baseline and watch for change over time.",
-    action:
-      level === "attention"
-        ? "Book a dermatologist appointment"
-        : "Add a follow-up photo later",
+      "These are photo measurements, not clinical findings. They are sensitive to light, focus and camera angle and cannot determine whether a spot is benign or malignant. If the spot is new, changing, different from others, itching or bleeding, contact a dermatologist.",
+    action: "Repeat later under matched conditions",
     factors,
   };
 }

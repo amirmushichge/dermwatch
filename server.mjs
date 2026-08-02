@@ -396,5 +396,8 @@ const isDirectRun =
   path.resolve(process.argv[1]) === path.resolve(fileURLToPath(import.meta.url));
 
 if (isDirectRun) {
-  await startStorageServer();
+  const configuredPort = Number(process.env.DERMWATCH_PORT || defaultPort);
+  await startStorageServer({
+    port: Number.isInteger(configuredPort) ? configuredPort : defaultPort,
+  });
 }

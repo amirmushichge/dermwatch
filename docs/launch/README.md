@@ -10,7 +10,7 @@ The launch thread is prepared as four posts:
 
 The Russian review copy is in [`THREAD_RU.md`](THREAD_RU.md), and the English
 publication copy is in [`THREAD_EN.md`](THREAD_EN.md). Release notes are in
-[`RELEASE_NOTES_v0.2.2.md`](RELEASE_NOTES_v0.2.2.md). The HTML files in
+[`RELEASE_NOTES_v0.2.3.md`](RELEASE_NOTES_v0.2.3.md). The HTML files in
 `visuals/` are editable sources for the 1600 x 900 PNG assets.
 
 Before publication, review the Russian and English copy, attach the main demo

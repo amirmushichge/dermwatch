@@ -64,6 +64,9 @@ currently distributed directly from GitHub rather than Google Play.
 - measures visible asymmetry, border irregularity, color variation, and
   contrast using local image-processing heuristics;
 - checks whether follow-up photos likely show the same spot;
+- treats same-day photos as retakes rather than biological evolution;
+- blocks change scores when focus, detection, scale, or framing make the
+  photos insufficiently comparable;
 - compares visible changes between observations;
 - keeps a chronological photo history and reminder interval;
 - exports and restores a private JSON backup containing records and photos;
