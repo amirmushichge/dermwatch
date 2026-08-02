@@ -5,10 +5,15 @@ import path from "node:path";
 import { spawn } from "node:child_process";
 
 const projectRoot = path.resolve(import.meta.dirname, "..");
+const executableOverride = process.env.DERMWATCH_PACKAGED_EXECUTABLE;
 const candidates =
   process.platform === "win32"
-    ? [path.join(projectRoot, "release", "win-unpacked", "DermWatch.exe")]
+    ? [
+        executableOverride,
+        path.join(projectRoot, "release", "win-unpacked", "DermWatch.exe"),
+      ].filter(Boolean)
     : [
+        executableOverride,
         path.join(
           projectRoot,
           "release",
@@ -27,7 +32,7 @@ const candidates =
           "MacOS",
           "DermWatch",
         ),
-      ];
+      ].filter(Boolean);
 
 async function firstExisting(paths) {
   for (const candidate of paths) {

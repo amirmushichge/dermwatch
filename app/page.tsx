@@ -470,6 +470,19 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="medical-safety" role="note" aria-label="Medical safety">
+        <span className="eyebrow">MEDICAL SAFETY</span>
+        <div>
+          <h2>DermWatch does not detect skin cancer</h2>
+          <p>
+            It cannot rule out melanoma or confirm that a spot is benign. It
+            does not provide a diagnosis or cancer-risk score. If a spot is
+            new, changing, different from the others, itching or bleeding,
+            contact a dermatologist.
+          </p>
+        </div>
+      </section>
+
       {notice && (
         <button className="notice" onClick={() => setNotice("")}>
           {notice}

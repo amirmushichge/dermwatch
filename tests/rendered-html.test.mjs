@@ -33,6 +33,8 @@ test("keeps the local privacy and storage contract explicit", async () => {
   assert.match(storageClient, /127\.0\.0\.1:8788/);
   assert.match(page, /Photos never leave this computer/i);
   assert.match(page, /Not a diagnosis/);
+  assert.match(page, /DermWatch does not detect skin cancer/);
+  assert.match(page, /cannot rule out melanoma/);
   assert.match(page, /SINGLE-PHOTO SCREEN/);
   assert.match(analysis, /export function assessSingleImage/);
   assert.match(analysis, /This does not mean cancer/);
@@ -48,6 +50,7 @@ test("keeps the local privacy and storage contract explicit", async () => {
   assert.match(server, /server\.listen\(port, host/);
   assert.match(server, /const defaultHost = "127\.0\.0\.1"/);
   assert.match(readme, /%APPDATA%\\DermWatch\\data/);
+  assert.match(readme, /does not detect or rule out skin cancer or melanoma/i);
   assert.match(storageClient, /resolveApiUrl/);
   assert.match(storageClient, /Directory\.Data/);
   assert.match(storageClient, /format: "dermwatch-backup"/);
