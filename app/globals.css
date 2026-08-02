@@ -2024,6 +2024,42 @@ footer {
   font-size: 8px;
 }
 
+.medical-safety {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
+  gap: 28px;
+  width: min(1440px, calc(100% - 48px));
+  max-width: 1440px;
+  margin: 0 auto 24px;
+  padding: 24px 28px;
+  border: 1px solid #cfcfc8;
+  border-left: 5px solid #111;
+  border-radius: 14px;
+  background: #f2f2ee;
+}
+
+.medical-safety .eyebrow {
+  margin: 4px 0 0;
+}
+
+.medical-safety h2 {
+  margin: 0;
+  color: #111;
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.15;
+}
+
+.medical-safety p {
+  max-width: 900px;
+  margin: 8px 0 0;
+  color: #555550;
+  font-size: 11px;
+  letter-spacing: -0.04em;
+  line-height: 1.55;
+}
+
 .notice {
   border-color: #111;
   border-radius: 12px;
@@ -2346,9 +2382,16 @@ footer {
 @media (max-width: 760px) {
   .offline-card,
   .empty-state,
-  .workspace {
+  .workspace,
+  .medical-safety {
     width: calc(100% - 24px);
     margin-right: auto;
     margin-left: auto;
+  }
+
+  .medical-safety {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 20px;
   }
 }

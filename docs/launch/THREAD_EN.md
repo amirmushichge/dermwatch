@@ -29,7 +29,8 @@ Visual: `02-workflow.png`.
 
 ## Post 3 — limitations
 
-The honest limitation: DermWatch does not diagnose skin cancer.
+The honest limitation: DermWatch does not detect or rule out skin cancer or
+melanoma. It cannot confirm that a spot is benign.
 
 There is no LLM or pretrained medical model inside — only experimental local
 computer-vision heuristics.

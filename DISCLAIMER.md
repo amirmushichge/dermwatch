@@ -1,7 +1,8 @@
 # Medical and research disclaimer
 
-DermWatch is an experimental visual monitoring tool. It is not a medical
-device, diagnostic system, clinical decision-support system, or substitute for
+DermWatch does not detect or rule out skin cancer or melanoma. It is an
+experimental visual monitoring tool, not a medical device, diagnostic system,
+clinical decision-support system, cancer-risk score, or substitute for
 professional medical care.
 
 Its image-processing rules have not been validated in a clinical trial and do

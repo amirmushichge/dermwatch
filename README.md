@@ -5,9 +5,11 @@ moles and other skin spots over time. Image analysis and storage stay on the
 user's device.
 
 > [!IMPORTANT]
-> DermWatch is not a medical device and does not diagnose cancer. A visual
-> screen cannot confirm that a mole is benign. New, changing, bleeding, itching,
-> or otherwise concerning spots should be assessed by a qualified clinician.
+> **DermWatch does not detect or rule out skin cancer or melanoma.** It is not
+> a medical device and does not provide a diagnosis or cancer-risk score. A
+> visual screen cannot confirm that a spot is benign. New, changing, different,
+> itching, bleeding, or otherwise concerning spots should be assessed by a
+> qualified clinician.
 
 ![DermWatch empty journal screen](docs/screenshots/overview.png)
 

@@ -16,8 +16,9 @@ follow-up photos, check image quality, and compare measurable visual changes.
 All processing and storage happen on the user's computer. No account, cloud AI,
 or separate runtime is required.
 
-DermWatch is an experimental monitoring tool, not a medical device and not a
-cancer diagnosis system.
+DermWatch does not detect or rule out skin cancer or melanoma and cannot
+confirm that a spot is benign. It is an experimental monitoring tool, not a
+medical device, diagnosis system, or cancer-risk score.
 
 ## Category and tags
 

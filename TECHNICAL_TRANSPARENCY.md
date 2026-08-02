@@ -23,9 +23,10 @@ specificity, or diagnostic accuracy.
 ## What a result means
 
 A DermWatch result describes visible measurements in the supplied image. It
-does not determine whether a lesion is benign or malignant. Different lighting,
-distance, focus, camera processing, skin deformation, or the wrong spot can
-change the measurements.
+does not detect or rule out skin cancer or melanoma, and it cannot determine
+whether a lesion is benign or malignant. Different lighting, distance, focus,
+camera processing, skin deformation, or the wrong spot can change the
+measurements.
 
 ## Data flow
 
