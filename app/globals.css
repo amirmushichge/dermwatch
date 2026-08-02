@@ -1,4 +1,5 @@
 :root {
+  color-scheme: only light;
   --paper: #f4f4f1;
   --surface: #ffffff;
   --ink: #0b0b0b;
@@ -1493,6 +1494,15 @@ footer {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.draft-info .capture-hint {
+  margin-top: 7px;
+  overflow: visible;
+  color: #555550;
+  line-height: 1.25;
+  text-overflow: clip;
+  white-space: normal;
 }
 
 .draft-info strong {

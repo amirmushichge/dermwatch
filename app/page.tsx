@@ -58,6 +58,19 @@ function factorMeterColor(value: number) {
   return `hsl(5 ${saturation}% ${lightness}%)`;
 }
 
+function captureQualityHint(analysis: AnalysisResult) {
+  if (analysis.segmentation.centerOffset > 0.3) {
+    return "Detection missed the centered spot — use even light and avoid phone or body shadows";
+  }
+  if (analysis.quality.sharpness < 65) {
+    return "Low sharpness — hold steady and tap the spot to focus";
+  }
+  if (analysis.segmentation.confidence < 55) {
+    return "Spot detection is unstable — move closer without digital zoom";
+  }
+  return "Match the light, distance and camera angle before saving";
+}
+
 function nextCheck(lesion: Lesion) {
   const latest = [...lesion.observations].sort((a, b) =>
     b.date.localeCompare(a.date),
@@ -70,6 +83,12 @@ function nextCheck(lesion: Lesion) {
 function statusFromChange(change?: ChangeResult) {
   if (!change) {
     return { label: "Second photo needed", tone: "neutral" };
+  }
+  if (change.mode === "same-day-retake") {
+    return { label: "Same-day retake", tone: "neutral" };
+  }
+  if (change.captureIssues.length > 0) {
+    return { label: "Comparison unreliable", tone: "warning" };
   }
   if (change.identity === "different") {
     return { label: "Likely a different mole", tone: "danger" };
@@ -97,14 +116,11 @@ function statusFromAssessment(assessment?: SingleImageAssessment) {
     return { label: "Retake photo", tone: "warning" };
   }
   if (assessment.level === "attention") {
-    return { label: "In-person check advised", tone: "danger" };
+    return { label: "Photo measurements elevated", tone: "warning" };
   }
   return {
-    label:
-      assessment.flaggedCount === 1
-        ? "One feature flagged"
-        : "Tracking started",
-    tone: assessment.flaggedCount === 1 ? "warning" : "good",
+    label: "Baseline recorded",
+    tone: "good",
   };
 }
 
@@ -211,6 +227,7 @@ export default function Home() {
       latest.analysis,
       previous.sizeMm,
       latest.sizeMm,
+      daysBetween(previous.date, latest.date),
     );
   }, [orderedObservations]);
 
@@ -559,6 +576,7 @@ export default function Home() {
                         sorted.at(-1)!.analysis,
                         sorted.at(-2)!.sizeMm,
                         sorted.at(-1)!.sizeMm,
+                        daysBetween(sorted.at(-2)!.date, sorted.at(-1)!.date),
                       )
                     : undefined;
                 const last = sorted.at(-1);
@@ -639,22 +657,39 @@ export default function Home() {
               {latestComparison ? (
                 <>
                   <span>
-                    {latestComparison.identity === "same"
-                      ? "Change index"
-                      : "Object mismatch"}{" "}
-                    <strong>
-                      {Math.round(
-                        (latestComparison.identity === "same"
-                          ? latestComparison.score
-                          : latestComparison.identityScore || 0) * 100,
-                      )}
-                      /100
-                    </strong>
+                    {latestComparison.mode === "same-day-retake" ||
+                    latestComparison.reliability === "low" ? (
+                      <>
+                        Evolution <strong>not measured</strong>
+                      </>
+                    ) : (
+                      <>
+                        {latestComparison.identity === "same"
+                          ? "Change index"
+                          : "Object mismatch"}{" "}
+                        <strong>
+                          {Math.round(
+                            (latestComparison.identity === "same"
+                              ? latestComparison.score
+                              : latestComparison.identityScore || 0) * 100,
+                          )}
+                          /100
+                        </strong>
+                      </>
+                    )}
                   </span>
                   <span>
-                    Identity check{" "}
+                    {latestComparison.mode === "same-day-retake" ||
+                    latestComparison.captureIssues.length > 0
+                      ? "Capture match"
+                      : "Identity check"}{" "}
                     <strong>
-                      {latestComparison.identity === "same"
+                      {latestComparison.mode === "same-day-retake" ||
+                      latestComparison.captureIssues.length > 0
+                        ? latestComparison.identity === "same"
+                          ? "similar"
+                          : "not confirmed"
+                        : latestComparison.identity === "same"
                         ? "match"
                         : latestComparison.identity === "different"
                           ? "mismatch"
@@ -699,7 +734,7 @@ export default function Home() {
                     <div className="assessment-summary">
                       <div>
                         <span className="eyebrow">
-                          SINGLE-PHOTO SCREEN
+                          PHOTO-ONLY MEASUREMENTS
                         </span>
                         <h2>{latestAssessment.headline}</h2>
                         <p>{latestAssessment.message}</p>
@@ -723,9 +758,9 @@ export default function Home() {
                           </div>
                           <em>
                             {factor.state === "attention"
-                              ? "flagged"
+                              ? "higher in this photo"
                               : factor.state === "clear"
-                                ? "not flagged"
+                                ? "lower in this photo"
                                 : "no data"}
                           </em>
                           <p>{factor.detail}</p>
@@ -749,9 +784,9 @@ export default function Home() {
                     </div>
 
                     <p className="assessment-footnote">
-                      ABCDE: asymmetry, border, color and diameter come from the
-                      current photo. Evolution requires a follow-up. This is an
-                      experimental visual check and can be wrong.
+                      ABCDE values describe this image only. They are not a
+                      benign/malignant classification. Evolution requires a
+                      later photo taken under matched conditions.
                     </p>
                   </section>
                 )}
@@ -819,22 +854,31 @@ export default function Home() {
                       <div>
                         <span className="eyebrow">AUTOMATED COMPARISON</span>
                         <h2>
-                          {latestComparison.identity === "different"
+                          {latestComparison.mode === "same-day-retake"
+                            ? "Same-day photos are not evolution"
+                            : latestComparison.captureIssues.length > 0
+                              ? "Photos are not comparable enough"
+                            : latestComparison.identity === "different"
                             ? "This is likely a different mole"
                             : latestComparison.identity === "uncertain"
                               ? "Identity could not be confirmed"
+                              : latestComparison.reliability === "low"
+                                ? "Photos are not comparable enough"
                               : "What changed"}
                         </h2>
                       </div>
                       <span className="interval-chip">
-                        {daysBetween(
-                          orderedObservations.at(-2)!.date,
-                          orderedObservations.at(-1)!.date,
-                        )}{" "}
-                        days between photos
+                        {latestComparison.mode === "same-day-retake"
+                          ? "Same-day retake"
+                          : `${daysBetween(
+                              orderedObservations.at(-2)!.date,
+                              orderedObservations.at(-1)!.date,
+                            )} days between photos`}
                       </span>
                     </div>
-                    {latestComparison.identity === "same" ? (
+                    {latestComparison.identity === "same" &&
+                    latestComparison.reliability === "good" &&
+                    latestComparison.mode === "follow-up" ? (
                       <div className="change-bars">
                         {latestComparison.factors.map((factor) => (
                           <div className="change-row" key={factor.key}>
@@ -849,17 +893,31 @@ export default function Home() {
                     ) : (
                       <div className="identity-result">
                         <div className="identity-score">
-                          <span>Image mismatch</span>
+                          <span>
+                            {latestComparison.mode === "same-day-retake"
+                              ? "Comparison context"
+                              : latestComparison.identity === "same" ||
+                                  latestComparison.captureIssues.length > 0
+                                ? "Capture quality"
+                                : "Image mismatch"}
+                          </span>
                           <strong>
-                            {latestComparison.identityScore === undefined
-                              ? "—"
-                              : `${Math.round(
-                                  latestComparison.identityScore * 100,
-                                )}/100`}
+                            {latestComparison.mode === "same-day-retake"
+                              ? "Same day"
+                              : latestComparison.identity === "same" ||
+                                  latestComparison.captureIssues.length > 0
+                                ? "Limited"
+                                : latestComparison.identityScore === undefined
+                                  ? "—"
+                                  : `${Math.round(
+                                      latestComparison.identityScore * 100,
+                                    )}/100`}
                           </strong>
                         </div>
                         <p>{latestComparison.message}</p>
-                        {latestComparison.identity === "different" && (
+                        {latestComparison.identity === "different" &&
+                          latestComparison.captureIssues.length === 0 &&
+                          latestComparison.mode === "follow-up" && (
                           <button
                             className="secondary-button"
                             onClick={splitLatestObservation}
@@ -870,7 +928,9 @@ export default function Home() {
                         )}
                       </div>
                     )}
-                    {latestComparison.identity === "same" && (
+                    {latestComparison.identity === "same" &&
+                      latestComparison.reliability === "good" &&
+                      latestComparison.mode === "follow-up" && (
                       <p className="report-note">{latestComparison.message}</p>
                     )}
                   </section>
@@ -894,10 +954,15 @@ export default function Home() {
                         <small>
                           {index === 0
                             ? "Baseline"
-                            : `${daysBetween(
-                                orderedObservations[index - 1].date,
-                                observation.date,
-                              )} days later`}
+                            : daysBetween(
+                                  orderedObservations[index - 1].date,
+                                  observation.date,
+                                ) === 0
+                              ? "Same-day retake"
+                              : `${daysBetween(
+                                  orderedObservations[index - 1].date,
+                                  observation.date,
+                                )} days later`}
                         </small>
                       </div>
                     ))}
@@ -1071,15 +1136,22 @@ export default function Home() {
                         {(draft.file.size / 1_048_576).toFixed(1)} MB
                       </small>
                       {draft.analysis ? (
-                        <span
-                          className={`quality-badge ${draft.analysis.quality.status}`}
-                        >
-                          {draft.analysis.quality.status === "good"
-                            ? "Good quality"
-                            : draft.analysis.quality.status === "review"
-                              ? "Review quality"
-                              : "Retake recommended"}
-                        </span>
+                        <>
+                          <span
+                            className={`quality-badge ${draft.analysis.quality.status}`}
+                          >
+                            {draft.analysis.quality.status === "good"
+                              ? "Good quality"
+                              : draft.analysis.quality.status === "review"
+                                ? "Review quality"
+                                : "Retake recommended"}
+                          </span>
+                          {draft.analysis.quality.status !== "good" && (
+                            <small className="capture-hint">
+                              {captureQualityHint(draft.analysis)}
+                            </small>
+                          )}
+                        </>
                       ) : draft.error ? (
                         <span className="quality-badge retake">
                           {draft.error}
@@ -1175,7 +1247,7 @@ export default function Home() {
               <div>
                 <b>01</b>
                 <strong>Use the same soft light</strong>
-                <p>Avoid direct sun, glare and colored lamps.</p>
+                <p>Avoid direct sun, glare, colored lamps and phone shadows.</p>
               </div>
               <div>
                 <b>02</b>

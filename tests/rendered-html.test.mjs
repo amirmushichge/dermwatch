@@ -35,9 +35,15 @@ test("keeps the local privacy and storage contract explicit", async () => {
   assert.match(page, /Not a diagnosis/);
   assert.match(page, /DermWatch does not detect skin cancer/);
   assert.match(page, /cannot rule out melanoma/);
-  assert.match(page, /SINGLE-PHOTO SCREEN/);
+  assert.match(page, /PHOTO-ONLY MEASUREMENTS/);
+  assert.match(page, /Same-day photos are not evolution/);
+  assert.match(page, /Evolution <strong>not measured/);
+  assert.match(page, /Capture match/);
+  assert.match(page, /avoid phone or body shadows/);
   assert.match(analysis, /export function assessSingleImage/);
-  assert.match(analysis, /This does not mean cancer/);
+  assert.match(analysis, /capture variation, not biological change/);
+  assert.match(analysis, /sensitive to light, focus and camera angle/);
+  assert.doesNotMatch(analysis, /Book a dermatologist appointment/);
   assert.match(analysis, /shapeDistance/);
   assert.match(analysis, /identity: "same" \| "uncertain" \| "different"/);
   assert.match(page, /Move latest photo to a separate record/);

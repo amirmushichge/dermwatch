@@ -20,6 +20,12 @@ These are experimental, hand-written heuristics. They have not been trained or
 validated on a clinical dataset and do not provide known sensitivity,
 specificity, or diagnostic accuracy.
 
+The comparison layer does not calculate evolution from photos taken on the
+same day. It also withholds a change score when focus, segmentation confidence,
+relative scale, or framing falls outside the current comparability gates. These
+guards reduce obvious capture-related false changes; they do not make the
+remaining comparisons clinically validated.
+
 ## What a result means
 
 A DermWatch result describes visible measurements in the supplied image. It
