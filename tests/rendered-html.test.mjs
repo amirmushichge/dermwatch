@@ -23,12 +23,13 @@ test("builds a self-contained DermWatch application shell", async () => {
 });
 
 test("keeps the local privacy and storage contract explicit", async () => {
-  const [page, analysis, storageClient, server, readme, packageJson] = await Promise.all([
+  const [page, analysis, storageClient, server, readme, overview, packageJson] = await Promise.all([
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../lib/analysis.ts", import.meta.url), "utf8"),
     readFile(new URL("../lib/storage-client.ts", import.meta.url), "utf8"),
     readFile(new URL("../server.mjs", import.meta.url), "utf8"),
     readFile(new URL("../README.md", import.meta.url), "utf8"),
+    readFile(new URL("../docs/screenshots/overview.html", import.meta.url), "utf8"),
     readFile(new URL("../package.json", import.meta.url), "utf8"),
   ]);
 
@@ -59,6 +60,10 @@ test("keeps the local privacy and storage contract explicit", async () => {
   assert.match(server, /const defaultHost = "127\.0\.0\.1"/);
   assert.match(readme, /%APPDATA%\\DermWatch\\data/);
   assert.match(readme, /does not detect or rule out skin cancer or melanoma/i);
+  assert.match(readme, /^# Track changes in moles with DermWatch/m);
+  assert.match(overview, /Track changes in moles/);
+  assert.match(overview, /Keep a photo history/);
+  assert.doesNotMatch(overview, /Was it always like that|Build a record you can compare/);
   assert.match(storageClient, /resolveApiUrl/);
   assert.match(storageClient, /Directory\.Data/);
   assert.match(storageClient, /format: "dermwatch-backup"/);

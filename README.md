@@ -1,8 +1,8 @@
-# DermWatch
+# Track changes in moles with DermWatch
 
-DermWatch is a private local photo journal for monitoring visible changes in
-moles and other skin spots over time. Image analysis and storage stay on the
-user's device.
+DermWatch is a private local photo journal for saving repeatable mole photos,
+reviewing visible differences over time, and keeping a record you can show a
+dermatologist. Image analysis and storage stay on the user's device.
 
 > [!IMPORTANT]
 > **DermWatch does not detect or rule out skin cancer or melanoma.** It is not
