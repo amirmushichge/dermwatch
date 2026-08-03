@@ -2389,6 +2389,269 @@ footer {
   background: #f7f7f4;
 }
 
+/* Readable, compact desktop density */
+.topbar {
+  min-height: 70px;
+  padding-right: max(24px, calc((100vw - 1240px) / 2));
+  padding-left: max(24px, calc((100vw - 1240px) / 2));
+}
+
+.brand {
+  font-size: 22px;
+}
+
+.brand small,
+.service-state {
+  font-size: 10px;
+}
+
+.text-button,
+.secondary-button,
+.primary-button {
+  font-size: 13px;
+}
+
+.hero,
+.medical-safety,
+.offline-card,
+.empty-state,
+.workspace {
+  width: min(1240px, calc(100% - 48px));
+  max-width: 1240px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.hero {
+  min-height: 330px;
+  padding: 54px 24px 44px;
+}
+
+.hero p {
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.medical-safety {
+  grid-template-columns: 150px minmax(0, 1fr);
+  gap: 22px;
+  padding: 20px 24px;
+}
+
+.medical-safety p {
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.workspace {
+  grid-template-columns: 250px minmax(0, 1fr);
+}
+
+.lesion-list {
+  padding: 26px 16px;
+}
+
+.section-heading h2 {
+  font-size: 23px;
+}
+
+.eyebrow {
+  font-size: 10px;
+}
+
+.lesion-item {
+  grid-template-columns: 54px minmax(0, 1fr) auto;
+  min-height: 78px;
+  padding: 9px;
+}
+
+.thumbnail {
+  width: 54px;
+  height: 54px;
+}
+
+.lesion-copy strong {
+  font-size: 14px;
+}
+
+.lesion-copy small {
+  font-size: 12px;
+}
+
+.lesion-copy em {
+  margin-top: 6px;
+  font-size: 11px;
+}
+
+.detail-panel {
+  padding: 30px 32px 40px;
+}
+
+.detail-header h2 {
+  font-size: 36px;
+}
+
+.detail-header p {
+  font-size: 13px;
+}
+
+.status-strip {
+  gap: 14px;
+  min-height: 54px;
+  margin-top: 22px;
+  font-size: 12px;
+}
+
+.not-diagnosis {
+  font-size: 10px;
+}
+
+.single-assessment {
+  margin-top: 20px;
+}
+
+.assessment-summary {
+  grid-template-columns: minmax(0, 1.45fr) minmax(220px, 0.55fr);
+  gap: 22px;
+  padding: 24px;
+}
+
+.assessment-summary h2,
+.single-assessment.attention .assessment-summary h2 {
+  font-size: clamp(28px, 2.4vw, 34px);
+}
+
+.assessment-summary p {
+  max-width: 680px;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.assessment-highlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.assessment-highlights span {
+  min-width: 128px;
+  padding: 10px 12px;
+  border: 1px solid #deded8;
+  border-radius: 9px;
+  background: #f7f7f4;
+}
+
+.assessment-highlights small,
+.assessment-highlights strong {
+  display: block;
+}
+
+.assessment-highlights small {
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.assessment-highlights strong {
+  margin-top: 4px;
+  font-size: 13px;
+}
+
+.assessment-action {
+  padding: 18px;
+  box-shadow: none;
+}
+
+.assessment-action span,
+.assessment-action small {
+  font-size: 11px;
+}
+
+.assessment-action strong {
+  font-size: 15px;
+}
+
+.abcde-item {
+  min-height: 188px;
+  padding: 18px 16px;
+}
+
+.abcde-item > div:first-child span {
+  font-size: 13px;
+}
+
+.abcde-item em {
+  margin-top: 14px;
+  font-size: 11px;
+}
+
+.abcde-item p {
+  min-height: 48px;
+  margin: 8px 0 12px;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.factor-value {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 7px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.factor-value strong {
+  color: var(--ink);
+  font-size: 11px;
+}
+
+.factor-meter {
+  height: 6px;
+}
+
+.assessment-footnote {
+  padding: 14px 20px;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.comparison-grid {
+  gap: 14px;
+  margin-top: 20px;
+}
+
+.scan-label {
+  min-height: 50px;
+}
+
+.scan-label span {
+  font-size: 10px;
+}
+
+.scan-label strong {
+  font-size: 12px;
+}
+
+.scan-image {
+  height: clamp(280px, 27vw, 380px);
+}
+
+.scan-metrics {
+  min-height: 64px;
+}
+
+.scan-metrics span {
+  font-size: 11px;
+}
+
+.scan-metrics strong {
+  font-size: 13px;
+}
+
 @media (max-width: 760px) {
   .offline-card,
   .empty-state,
@@ -2403,5 +2666,36 @@ footer {
     grid-template-columns: 1fr;
     gap: 8px;
     padding: 20px;
+  }
+
+  .topbar {
+    padding-right: 16px;
+    padding-left: 16px;
+  }
+
+  .brand {
+    gap: 6px;
+    font-size: 20px;
+  }
+
+  .brand small {
+    display: none;
+  }
+
+  .header-actions {
+    gap: 8px;
+  }
+
+  .header-actions .primary-button {
+    white-space: nowrap;
+  }
+
+  .hero-summary {
+    min-width: 0;
+  }
+
+  .assessment-highlights {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

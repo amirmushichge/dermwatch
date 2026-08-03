@@ -739,6 +739,35 @@ export default function Home() {
                         </span>
                         <h2>{latestAssessment.headline}</h2>
                         <p>{latestAssessment.message}</p>
+                        <div
+                          className="assessment-highlights"
+                          aria-label="Single photo summary"
+                        >
+                          <span>
+                            <small>Photo quality</small>
+                            <strong>
+                              {latestObservation?.analysis.quality.status ===
+                              "good"
+                                ? "Suitable"
+                                : "Retake advised"}
+                            </strong>
+                          </span>
+                          <span>
+                            <small>Measured now</small>
+                            <strong>
+                              {
+                                latestAssessment.factors.filter(
+                                  (factor) => factor.value !== undefined,
+                                ).length
+                              }{" "}
+                              of 5 features
+                            </strong>
+                          </span>
+                          <span>
+                            <small>Higher measures</small>
+                            <strong>{latestAssessment.flaggedCount}</strong>
+                          </span>
+                        </div>
                       </div>
                       <div className="assessment-action">
                         <span>Suggested next step</span>
@@ -766,19 +795,29 @@ export default function Home() {
                           </em>
                           <p>{factor.detail}</p>
                           {factor.value !== undefined && (
-                            <div
-                              className="factor-meter"
-                              aria-label={`${factor.label}: ${Math.round(
-                                factor.value * 100,
-                              )} out of 100`}
-                            >
-                              <i
-                                style={{
-                                  width: formatPercent(factor.value),
-                                  backgroundColor: factorMeterColor(factor.value),
-                                }}
-                              />
-                            </div>
+                            <>
+                              <span className="factor-value">
+                                Photo measure
+                                <strong>
+                                  {Math.round(factor.value * 100)} / 100
+                                </strong>
+                              </span>
+                              <div
+                                className="factor-meter"
+                                aria-label={`${factor.label}: ${Math.round(
+                                  factor.value * 100,
+                                )} out of 100`}
+                              >
+                                <i
+                                  style={{
+                                    width: formatPercent(factor.value),
+                                    backgroundColor: factorMeterColor(
+                                      factor.value,
+                                    ),
+                                  }}
+                                />
+                              </div>
+                            </>
                           )}
                         </article>
                       ))}

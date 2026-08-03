@@ -812,17 +812,32 @@ export function assessSingleImage(
     (factor) => factor.state === "attention",
   ).length;
   const level = flaggedCount >= 3 ? "attention" : "baseline";
+  const elevatedLabels = factors
+    .filter((factor) => factor.state === "attention")
+    .map((factor) => factor.label);
+
+  const headline =
+    flaggedCount === 0
+      ? "Photo baseline measured"
+      : flaggedCount === 1
+        ? "One photo measurement is higher"
+        : flaggedCount === 2
+          ? "Two photo measurements are higher"
+          : "Several photo measurements are higher";
+
+  const message =
+    flaggedCount === 0
+      ? "The measurable shape, border and color values were lower on this photo-only scale. This does not show that a spot is benign; it gives you a baseline for a later comparison. Photo measurements are sensitive to light, focus and camera angle."
+      : `This image produced higher photo-only measurements for ${elevatedLabels.join(
+          " and ",
+        )}. Photo measurements are sensitive to light, focus and camera angle, so use them as a baseline rather than a diagnosis.`;
 
   return {
     level,
     flaggedCount,
-    headline:
-      level === "attention"
-        ? "Several photo measurements are elevated"
-        : "Baseline recorded",
-    message:
-      "These are photo measurements, not clinical findings. They are sensitive to light, focus and camera angle and cannot determine whether a spot is benign or malignant. If the spot is new, changing, different from others, itching or bleeding, contact a dermatologist.",
-    action: "Repeat later under matched conditions",
+    headline,
+    message,
+    action: "Save this baseline and repeat later",
     factors,
   };
 }

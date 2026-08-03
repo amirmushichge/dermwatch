@@ -104,6 +104,7 @@ test("two elevated photo measurements do not trigger a clinical directive", () =
 
   assert.equal(result.flaggedCount, 2);
   assert.equal(result.level, "baseline");
-  assert.equal(result.headline, "Baseline recorded");
+  assert.equal(result.headline, "Two photo measurements are higher");
+  assert.match(result.message, /Asymmetry and Border/);
   assert.doesNotMatch(result.action, /dermatologist|appointment/i);
 });
