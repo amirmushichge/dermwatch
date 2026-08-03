@@ -62,7 +62,8 @@ test("keeps the local privacy and storage contract explicit", async () => {
   assert.match(server, /const defaultHost = "127\.0\.0\.1"/);
   assert.match(readme, /%APPDATA%\\DermWatch\\data/);
   assert.match(readme, /does not detect or rule out skin cancer or melanoma/i);
-  assert.match(readme, /^# Track changes in moles with DermWatch/m);
+  assert.match(readme, /^# Check moles for visual warning signs with DermWatch/m);
+  assert.match(readme, /ABCDE[\s\S]*associated with melanoma risk/i);
   assert.match(overview, /Track changes in moles/);
   assert.match(overview, /Keep a photo history/);
   assert.doesNotMatch(overview, /Was it always like that|Build a record you can compare/);
