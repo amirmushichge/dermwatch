@@ -588,33 +588,45 @@ export default function Home() {
                   ? statusFromChange(change)
                   : statusFromAssessment(singleAssessment);
                 return (
-                  <button
+                  <article
                     key={lesion.id}
-                    className={`lesion-item ${
+                    className={`lesion-entry ${
                       selected.id === lesion.id ? "active" : ""
                     }`}
-                    onClick={() => setSelectedId(lesion.id)}
                   >
-                    <span className="thumbnail">
-                      {last ? (
-                        <img
-                          src={storageClient.resolveImageUrl(last.imageUrl)}
-                          alt=""
-                          loading="lazy"
-                        />
-                      ) : (
-                        <i />
-                      )}
-                    </span>
-                    <span className="lesion-copy">
-                      <strong>{lesion.name}</strong>
-                      <small>{lesion.location}</small>
-                      <em className={`mini-status ${status.tone}`}>
-                        {status.label}
-                      </em>
-                    </span>
-                    <span className="chevron">›</span>
-                  </button>
+                    <button
+                      className="lesion-item"
+                      onClick={() => setSelectedId(lesion.id)}
+                    >
+                      <span className="thumbnail">
+                        {last ? (
+                          <img
+                            src={storageClient.resolveImageUrl(last.imageUrl)}
+                            alt=""
+                            loading="lazy"
+                          />
+                        ) : (
+                          <i />
+                        )}
+                      </span>
+                      <span className="lesion-copy">
+                        <strong>{lesion.name}</strong>
+                        <small>{lesion.location}</small>
+                        <em className={`mini-status ${status.tone}`}>
+                          {status.label}
+                        </em>
+                      </span>
+                      <span className="chevron">›</span>
+                    </button>
+                    <button
+                      className="record-delete-button"
+                      aria-label={`Delete ${lesion.name}`}
+                      title="Delete record"
+                      onClick={() => void deleteLesion(lesion.id)}
+                    >
+                      ×
+                    </button>
+                  </article>
                 );
               })}
             </div>

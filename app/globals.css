@@ -527,6 +527,14 @@ code {
   margin-top: 24px;
 }
 
+.lesion-entry {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  background: transparent;
+}
+
 .lesion-item {
   display: grid;
   grid-template-columns: 58px minmax(0, 1fr) auto;
@@ -535,21 +543,49 @@ code {
   width: 100%;
   min-height: 82px;
   padding: 10px;
-  border: 1px solid transparent;
-  border-radius: 11px;
+  border: 0;
+  border-radius: inherit;
   background: transparent;
   cursor: pointer;
   text-align: left;
 }
 
-.lesion-item:hover {
+.lesion-entry:hover {
   background: rgba(255, 255, 255, 0.55);
 }
 
-.lesion-item.active {
+.lesion-entry.active {
   border-color: #c7d6cf;
   background: white;
   box-shadow: 0 7px 24px rgba(25, 48, 40, 0.07);
+}
+
+.record-delete-button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  display: grid;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  place-items: center;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.82);
+  color: #777771;
+  cursor: pointer;
+  font-size: 19px;
+  line-height: 1;
+  opacity: 0.72;
+}
+
+.record-delete-button:hover,
+.record-delete-button:focus-visible {
+  border-color: #cfcfc9;
+  background: #fff;
+  color: #111;
+  opacity: 1;
+  outline: none;
 }
 
 .thumbnail {
@@ -1777,7 +1813,7 @@ footer {
     padding-bottom: 8px;
   }
 
-  .lesion-item {
+  .lesion-entry {
     min-width: 210px;
   }
 
@@ -2144,11 +2180,11 @@ footer {
   border-radius: 13px;
 }
 
-.lesion-item:hover {
+.lesion-entry:hover {
   background: #fff;
 }
 
-.lesion-item.active {
+.lesion-entry.active {
   border-color: #bcbcb6;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
 }
