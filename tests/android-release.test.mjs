@@ -19,7 +19,7 @@ test("Android keeps health photos private and requests no media permissions", ()
   assert.doesNotMatch(manifest, /READ_MEDIA_IMAGES|CAMERA/);
   assert.match(capacitorConfig, /appId:\s*"com\.dermwatch\.local"/);
   assert.equal(packageJson.dependencies["@capacitor/share"], "^8.0.1");
-  assert.equal(packageJson.version, "0.2.3");
+  assert.equal(packageJson.version, "0.2.4");
   assert.match(androidBuild, /versionCode 5/);
   assert.match(androidBuild, /versionName "0\.2\.3"/);
 });

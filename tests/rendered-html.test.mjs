@@ -15,7 +15,9 @@ test("builds a self-contained DermWatch application shell", async () => {
     "utf8",
   );
   assert.match(script, /DermWatch/);
-  assert.match(script, /PRIVATE SKIN JOURNAL/);
+  assert.match(script, /MOLE CHANGE TRACKER/);
+  assert.match(script, /Track changes in moles/);
+  assert.match(script, /does not detect cancer or precancerous conditions/);
   assert.match(script, /Photos never leave this computer/i);
   assert.doesNotMatch(script, /codex-preview|SkeletonPreview/);
 });

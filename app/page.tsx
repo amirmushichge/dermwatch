@@ -460,15 +460,16 @@ export default function Home() {
 
       <section className="hero">
         <div>
-          <span className="eyebrow">PRIVATE SKIN JOURNAL</span>
+          <span className="eyebrow">MOLE CHANGE TRACKER</span>
           <h1>
-            See what changed
+            Track changes in moles
             <br />
-            <em>Remember what didn’t</em>
+            <em>Keep a photo history</em>
           </h1>
           <p>
-            Build a private, repeatable photo record. DermWatch keeps every
-            image on your computer and compares visible features over time.
+            Save repeatable photos, review visible differences over time and
+            keep a private record you can show a dermatologist. DermWatch does
+            not detect cancer or precancerous conditions.
           </p>
         </div>
         <div className="hero-summary">
