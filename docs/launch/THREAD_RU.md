@@ -1,57 +1,57 @@
-# DermWatch launch thread — Russian review copy
+# DermWatch launch thread — Russian publication copy
 
-The main product-demo video is attached to post 1. Static visuals are paired
-with posts 2–4.
+Публикуйте как цепочку из четырёх постов. К первому посту прикрепите готовую
+видеодемонстрацию, к постам 2–4 — указанные изображения.
 
-## Post 1 — hook + video demo
+## Пост 1 — боль, решение и видео
 
-Одна родинка → повторяемая история изменений на вашем устройстве.
+Большинство людей фотографируют родинку один раз — а через месяц не помнят, изменилась ли она.
 
-DermWatch сохраняет базовый снимок, помогает повторить фото позже и показывает
-измеримые визуальные различия.
+DermWatch превращает отдельные снимки в локальную историю: сохраняет базовое фото, помогает повторить кадр и сравнивает изменения.
 
-[LOCAL APP] [NO CLOUD]
+Windows, macOS и Android. Без аккаунта и облака.
 
-Video: main product demonstration.
+Медиа: готовая видеодемонстрация.
 
-## Post 2 — workflow
+## Пост 2 — польза одного фото
 
-Workflow:
+Польза есть уже после одного фото.
 
-> создать карточку
-> добавить базовое фото
-> повторить снимок позже
-> сравнить форму, границу и цвет
+DermWatch сначала проверяет качество кадра, затем показывает фото-измерения формы, границы, цвета и введённого размера.
 
-Фото остаются на устройстве. Без аккаунта и облачной загрузки.
+Если снимок ненадёжный — просит переснять, а не придумывает уверенный результат.
 
-Visual: `02-workflow.png`.
+Медиа: `visuals/02-workflow.png`.
 
-## Post 3 — transparent limitations
+## Пост 3 — защита от ложной динамики
 
-Честное ограничение: DermWatch не выявляет и не исключает рак кожи или
-меланому. Он не может подтвердить, что родинка доброкачественная.
+Второй снимок нужен для динамики — но только если условия сопоставимы.
 
-Внутри нет LLM или готовой медицинской нейросети — только локальные эвристики
-компьютерного зрения.
+Приложение сверяет родинку, свет, угол, расстояние и резкость. Снимки в один день считает пересъёмкой, а плохое сравнение блокирует.
 
-Новая, растущая, зудящая или кровоточащая родинка → к врачу.
+Так меньше ложных «ухудшений» из-за камеры.
 
-Visual: `03-transparency.png`.
+Медиа: `visuals/03-transparency.png`.
 
-## Post 4 — open-source CTA and credits
+## Пост 4 — платформы, безопасность и авторство
 
-Free + open source.
+Бесплатно и open source
 
-Windows + macOS + Android: https://github.com/amirmushichge/dermwatch/releases/latest
-Source: https://github.com/amirmushichge/dermwatch
+Windows + macOS + Android
+https://github.com/amirmushichge/dermwatch/releases/latest
 
-Адаптация: [@youraipulse](https://x.com/youraipulse) ×
-[@AmirMushich](https://x.com/AmirMushich).
+Локально. Без аккаунта. Не выявляет рак кожи. Не диагноз и не cancer-risk score
 
-Идея вдохновлена исследовательским проектом OpenDerm от
-[@marionlepert](https://x.com/marionlepert).
+Адаптация: @youraipulse × @AmirMushich
+Вдохновлено OpenDerm / @marionlepert
 
-Download. Run locally. Keep a repeatable record_
+Медиа: `visuals/04-open-source.png`.
 
-Visual: `04-open-source.png`.
+## Важное примечание
+
+DermWatch не выявляет и не исключает рак кожи или меланому и не подтверждает,
+что родинка доброкачественная. Новое, меняющееся, зудящее или кровоточащее
+образование следует показать врачу.
+
+Демонстрационный снимок в материалах — фрагмент изображения National Cancer
+Institute из общественного достояния, опубликованного на Wikimedia Commons.
