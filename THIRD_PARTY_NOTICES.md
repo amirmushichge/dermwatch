@@ -1,5 +1,19 @@
 # Third-party notices
 
+## Demonstration photograph
+
+The cropped mole photograph used in `docs/screenshots/overview.png` and its
+editable source is derived from **Normal mole (1).jpg**, published by the
+National Cancer Institute. Wikimedia Commons identifies the image as public
+domain with no reuse restrictions:
+
+- Source: https://commons.wikimedia.org/wiki/File:Normal_mole_(1).jpg
+- Rights statement: Public domain / United States federal government work
+
+The photograph is used only to demonstrate DermWatch's photo-record workflow.
+It is not a diagnosis, a model-training asset, or evidence that DermWatch can
+classify a skin spot.
+
 DermWatch is licensed under the MIT License. The project also uses the
 following third-party software and fonts.
 

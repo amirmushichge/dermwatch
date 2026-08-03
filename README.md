@@ -11,7 +11,12 @@ user's device.
 > itching, bleeding, or otherwise concerning spots should be assessed by a
 > qualified clinician.
 
-![DermWatch empty journal screen](docs/screenshots/overview.png)
+![DermWatch local mole photo journal overview](docs/screenshots/overview.png)
+
+The demonstration photograph in the preview is a cropped public-domain image
+from the [National Cancer Institute](https://commons.wikimedia.org/wiki/File:Normal_mole_(1).jpg).
+It is included only to illustrate the photo-record workflow and is not a sample
+diagnosis or a statement about an individual spot.
 
 ## Install
 

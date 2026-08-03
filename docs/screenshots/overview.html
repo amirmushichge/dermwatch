@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/favicon.svg" />
+    <title>DermWatch product overview</title>
+    <style>
+      @font-face {
+        font-family: "Manrope";
+        src: url("../launch/visuals/assets/manrope-400.woff2") format("woff2");
+        font-weight: 400;
+      }
+
+      @font-face {
+        font-family: "Manrope";
+        src: url("../launch/visuals/assets/manrope-600.woff2") format("woff2");
+        font-weight: 600;
+      }
+
+      :root {
+        font-family: "Manrope", sans-serif;
+        color: #0a0a0a;
+        background: #f7f7f4;
+        font-synthesis: none;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        width: 1600px;
+        height: 900px;
+        margin: 0;
+        overflow: hidden;
+        letter-spacing: -0.04em;
+        background:
+          radial-gradient(circle at 1px 1px, rgba(10, 10, 10, 0.09) 1px, transparent 1px),
+          #f7f7f4;
+        background-size: 24px 24px;
+      }
+
+      main {
+        width: 100%;
+        height: 100%;
+        padding: 46px 58px 42px;
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+        gap: 38px;
+      }
+
+      header,
+      footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      header {
+        padding-bottom: 18px;
+        border-bottom: 1px solid #171717;
+      }
+
+      .brand {
+        font-size: 23px;
+        font-weight: 600;
+      }
+
+      .brand span,
+      .platforms span,
+      .eyebrow,
+      .card-label,
+      .meta {
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .brand span {
+        margin-left: 12px;
+        padding: 5px 8px;
+        border: 1px solid #b8b8b3;
+        border-radius: 7px;
+        font-size: 10px;
+        vertical-align: 4px;
+      }
+
+      .platforms {
+        display: flex;
+        gap: 8px;
+      }
+
+      .platforms span {
+        padding: 10px 13px;
+        border: 1px solid #c8c8c2;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.8);
+        font-size: 11px;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: 0.88fr 1.12fr;
+        align-items: center;
+        gap: 82px;
+      }
+
+      .copy {
+        padding-left: 24px;
+      }
+
+      .eyebrow {
+        margin-bottom: 22px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      h1 {
+        max-width: 650px;
+        margin: 0;
+        font-size: 74px;
+        font-weight: 600;
+        line-height: 0.98;
+      }
+
+      h1 span {
+        display: block;
+        font-weight: 400;
+      }
+
+      .description {
+        max-width: 555px;
+        margin: 30px 0 0;
+        color: #5e5e59;
+        font-size: 18px;
+        line-height: 1.35;
+      }
+
+      .steps {
+        margin-top: 34px;
+        display: grid;
+        grid-template-columns: repeat(3, max-content);
+        gap: 10px;
+      }
+
+      .step {
+        padding: 12px 15px;
+        border: 1px solid #c7c7c1;
+        border-radius: 10px;
+        background: #fff;
+        font-size: 13px;
+      }
+
+      .step b {
+        margin-right: 7px;
+      }
+
+      .record {
+        position: relative;
+        min-height: 580px;
+        padding: 22px;
+        border: 1px solid #c7c7c1;
+        border-radius: 26px;
+        background: rgba(255, 255, 255, 0.96);
+        box-shadow: 0 24px 60px rgba(15, 15, 13, 0.12);
+      }
+
+      .record-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 4px 4px 18px;
+      }
+
+      .record-title {
+        font-size: 24px;
+        font-weight: 600;
+      }
+
+      .status {
+        padding: 8px 11px;
+        border: 1px solid #c7c7c1;
+        border-radius: 999px;
+        font-size: 11px;
+      }
+
+      .photos {
+        display: grid;
+        grid-template-columns: 1fr 0.78fr;
+        gap: 16px;
+        height: 486px;
+      }
+
+      .photo-card,
+      .follow-up {
+        overflow: hidden;
+        border: 1px solid #cdcdc7;
+        border-radius: 18px;
+        background: #fff;
+      }
+
+      .photo-card {
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+      }
+
+      .photo-card img {
+        width: 100%;
+        height: 100%;
+        min-height: 0;
+        object-fit: cover;
+      }
+
+      .card-head,
+      .card-foot {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 16px;
+      }
+
+      .card-label,
+      .meta {
+        font-size: 10px;
+      }
+
+      .card-foot {
+        color: #65655f;
+        font-size: 12px;
+      }
+
+      .follow-up {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 34px;
+        text-align: center;
+        border-style: dashed;
+      }
+
+      .plus {
+        width: 54px;
+        height: 54px;
+        margin-bottom: 20px;
+        display: grid;
+        place-items: center;
+        border: 1px solid #9f9f99;
+        border-radius: 50%;
+        font-size: 27px;
+      }
+
+      .follow-up strong {
+        font-size: 20px;
+      }
+
+      .follow-up p {
+        margin: 10px 0 0;
+        color: #6c6c66;
+        font-size: 13px;
+        line-height: 1.3;
+      }
+
+      footer {
+        padding-top: 18px;
+        border-top: 1px solid #171717;
+        color: #6b6b65;
+        font-size: 12px;
+      }
+
+      footer strong {
+        color: #0a0a0a;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div class="brand">DermWatch <span>Local</span></div>
+        <div class="platforms" aria-label="Supported platforms">
+          <span>Windows</span>
+          <span>macOS</span>
+          <span>Android</span>
+        </div>
+      </header>
+
+      <section class="hero">
+        <div class="copy">
+          <div class="eyebrow">Private skin photo journal</div>
+          <h1>Was it always like that<span>Build a record you can compare</span></h1>
+          <p class="description">
+            Save a clear baseline photo, repeat the shot later and review visible
+            differences without sending private images to the cloud.
+          </p>
+          <div class="steps" aria-label="Workflow">
+            <div class="step"><b>01</b> Save</div>
+            <div class="step"><b>02</b> Repeat</div>
+            <div class="step"><b>03</b> Compare</div>
+          </div>
+        </div>
+
+        <div class="record">
+          <div class="record-top">
+            <div>
+              <div class="card-label">Lower leg</div>
+              <div class="record-title">Mole record</div>
+            </div>
+            <div class="status">Stored on this device</div>
+          </div>
+
+          <div class="photos">
+            <article class="photo-card">
+              <div class="card-head">
+                <span class="card-label">Baseline photo</span>
+                <span class="meta">Day 01</span>
+              </div>
+              <img
+                src="assets/demo-normal-mole.jpg"
+                alt="Public-domain demonstration photograph of a mole"
+              />
+              <div class="card-foot">
+                <span>Real reference photo</span>
+                <span>Private by default</span>
+              </div>
+            </article>
+
+            <article class="follow-up">
+              <div class="plus">+</div>
+              <strong>Add a follow-up</strong>
+              <p>Match the light, distance and camera position for a useful comparison.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        <span><strong>Free and open source</strong> · No account · No cloud upload</span>
+        <span>Experimental visual measurements · Not a medical device</span>
+      </footer>
+    </main>
+  </body>
+</html>
