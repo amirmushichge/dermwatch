@@ -1,22 +1,46 @@
-# Track changes in moles with DermWatch
+# Check moles for visual warning signs with DermWatch
 
-DermWatch is a private local photo journal for saving repeatable mole photos,
-reviewing visible differences over time, and keeping a record you can show a
-dermatologist. Image analysis and storage stay on the user's device.
+DermWatch is a free local tool for a preliminary check of visual **ABCDE
+warning signs associated with melanoma risk**. From one photo it measures
+image-level asymmetry, border irregularity, color variation, and entered
+diameter. Follow-up photos add the most important signal: visible change over
+time. When its visual measurements are elevated, DermWatch recommends an
+in-person check with a dermatologist.
+
+Image analysis and photo storage stay on the user's device. No account or cloud
+upload is required.
 
 > [!IMPORTANT]
-> **DermWatch does not detect or rule out skin cancer or melanoma.** It is not
-> a medical device and does not provide a diagnosis or cancer-risk score. A
-> visual screen cannot confirm that a spot is benign. New, changing, different,
-> itching, bleeding, or otherwise concerning spots should be assessed by a
-> qualified clinician.
+> **DermWatch identifies visual warning signs, not cancer.** It is not a medical
+> device and does not calculate a clinically validated probability of cancer or
+> personal risk score. It does not detect or rule out skin cancer or melanoma
+> or confirm that a spot is benign. Diagnosis requires an in-person examination
+> and, when needed, a biopsy. New, changing, different, itching, bleeding, or
+> otherwise concerning spots should be assessed by a qualified clinician.
 
-![DermWatch local mole photo journal overview](docs/screenshots/overview.png)
+![DermWatch preliminary visual warning-sign check and mole history](docs/screenshots/overview.png)
 
 The demonstration photograph in the preview is a cropped public-domain image
 from the [National Cancer Institute](https://commons.wikimedia.org/wiki/File:Normal_mole_(1).jpg).
 It is included only to illustrate the photo-record workflow and is not a sample
-diagnosis or a statement about an individual spot.
+diagnosis, risk estimate, or statement about an individual spot.
+
+## Main purpose
+
+DermWatch helps a person notice visual signs that can warrant a professional
+skin-cancer check:
+
+- **A — Asymmetry:** one side of the visible spot differs from the other;
+- **B — Border:** the visible edge appears more irregular or poorly defined;
+- **C — Color:** the photo contains uneven color or multiple shades;
+- **D — Diameter:** the user records a ruler-based measurement when available;
+- **E — Evolving:** later photos show a change in size, shape, or color.
+
+The ABCDE rule describes warning signs of early melanoma according to the
+[American Academy of Dermatology](https://www.aad.org/public/diseases/skin-cancer/abcdes-melanoma)
+and the [National Cancer Institute](https://www.cancer.gov/types/skin/moles-fact-sheet#what-does-melanoma-look-like).
+These signs are reasons to pay attention and seek medical review; they are not
+a diagnosis or a numerical probability of cancer.
 
 ## Install
 
@@ -63,6 +87,10 @@ currently distributed directly from GitHub rather than Google Play.
 
 ## What it does
 
+- performs a preliminary single-photo check of visible ABCDE warning signs
+  associated with melanoma risk;
+- explains which image-level signs are more pronounced and when an in-person
+  dermatologist check is sensible;
 - creates a separate record for each mole or skin spot;
 - accepts one or several photos at once;
 - checks sharpness, exposure, resolution, and segmentation confidence;
@@ -99,15 +127,17 @@ screen. The backup contains health photos and should be kept private. See
 
 ## How the analysis works
 
-DermWatch is not an LLM. It uses deterministic browser image processing:
+DermWatch is not an LLM and does not contain a pretrained medical classifier.
+It uses deterministic browser image processing:
 
 ```text
-photo -> quality checks -> spot segmentation -> visual feature measurements
-      -> identity check -> comparison -> user-facing guidance
+photo -> quality gate -> spot segmentation -> ABCD visual measurements
+      -> identity and capture checks -> E (evolution) -> guidance
 ```
 
-The thresholds are experimental and have not been clinically validated. See
-[DISCLAIMER.md](DISCLAIMER.md).
+The thresholds describe image features only. They are experimental, have not
+been clinically validated, and must not be interpreted as a cancer probability
+or proof that a spot is safe. See [DISCLAIMER.md](DISCLAIMER.md).
 
 ## Run from source
 
