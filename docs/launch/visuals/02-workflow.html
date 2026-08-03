@@ -3,37 +3,30 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="stylesheet" href="shared.css" />
-    <title>DermWatch workflow</title>
+    <title>DermWatch single-photo check</title>
     <style>
-      .hero { margin-top: 66px; display: flex; justify-content: space-between; align-items: end; }
-      .headline { max-width: 910px; }
-      .hero-note { width: 360px; color: var(--muted); font-size: 19px; line-height: 1.25; letter-spacing: -0.04em; }
-      .flow { margin-top: 82px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; }
-      .flow-card { position: relative; min-height: 232px; padding: 26px; }
-      .flow-card:not(:first-child)::before { content: ""; position: absolute; left: -29px; top: 52px; width: 28px; height: 2px; background: var(--ink); }
-      .number { color: var(--muted); font-size: 13px; }
-      .flow-card h2 { margin-top: 43px; font-size: 28px; line-height: 1; letter-spacing: -0.05em; }
-      .flow-card p { margin-top: 17px; color: var(--muted); font-size: 16px; line-height: 1.28; letter-spacing: -0.04em; }
-      .flow-card .square { position: absolute; left: 26px; bottom: 25px; }
+      .content { margin-top: 52px; display: grid; grid-template-columns: 0.72fr 1.28fr; gap: 48px; align-items: center; }
+      .copy { padding-left: 12px; }
+      .copy h1 { margin-top: 28px; max-width: 560px; font-size: 74px; line-height: 0.94; letter-spacing: -0.06em; }
+      .copy p { margin-top: 28px; max-width: 520px; color: var(--muted); font-size: 20px; line-height: 1.34; letter-spacing: -0.035em; }
+      .proof { height: 610px; padding: 26px; display: flex; align-items: center; background: var(--surface); }
+      .proof img { width: 100%; height: auto; display: block; border: 1px solid var(--line); border-radius: 18px; }
+      .tags { margin-top: 34px; display: flex; flex-wrap: wrap; gap: 10px; }
     </style>
   </head>
   <body>
     <main class="frame">
-      <header class="topbar"><span>DERMWATCH</span><span class="meta">02 / REPEATABLE WORKFLOW</span></header>
-      <section class="hero">
-        <div>
-          <div class="eyebrow">PRIVATE SKIN JOURNAL</div>
-          <h1 class="headline">One spot<br /><span class="accent">A repeatable record</span></h1>
+      <header class="topbar"><span>DERMWATCH</span><span class="meta">02 / ONE PHOTO</span></header>
+      <section class="content">
+        <div class="copy">
+          <div class="eyebrow">PHOTO-ONLY MEASUREMENTS</div>
+          <h1>Useful before the second photo</h1>
+          <p>DermWatch checks capture quality first. If the image is unreliable, it asks for a retake instead of inventing a confident result.</p>
+          <div class="tags"><span class="tag">Quality gate</span><span class="tag">ABCDE measures</span></div>
         </div>
-        <p class="hero-note">The value is not one prediction. It is a consistent visual history over time.</p>
+        <div class="card proof"><img src="assets/single-photo-result.png" alt="DermWatch single-photo quality result" /></div>
       </section>
-      <section class="flow">
-        <article class="card flow-card"><span class="number">01</span><h2>Create a record</h2><p>Name the spot and body location.</p><span class="square"></span></article>
-        <article class="card flow-card"><span class="number">02</span><h2>Add a baseline</h2><p>Keep the first clear photo as reference.</p><span class="square"></span></article>
-        <article class="card flow-card"><span class="number">03</span><h2>Repeat later</h2><p>Match light, distance and camera position.</p><span class="square"></span></article>
-        <article class="card flow-card"><span class="number">04</span><h2>Compare change</h2><p>Review measured differences in shape and color.</p><span class="square"></span></article>
-      </section>
-      <footer class="footer"><span>PULSE × @AMIRMUSHICH</span><span>[LOCAL TOOL] [NO CLOUD]</span></footer>
+      <footer class="footer"><span>PULSE × @AMIRMUSHICH</span><span>[LOCAL] [NOT A DIAGNOSIS]</span></footer>
     </main>
   </body>
 </html>

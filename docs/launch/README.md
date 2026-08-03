@@ -3,8 +3,8 @@
 The launch thread is prepared as four posts:
 
 1. product-demo video and the concrete user value;
-2. repeatable local workflow with `visuals/02-workflow.png`;
-3. technical and medical limitations with `visuals/03-transparency.png`;
+2. useful single-photo quality feedback with `visuals/02-workflow.png`;
+3. comparison guardrails that block unreliable change with `visuals/03-transparency.png`;
 4. Windows, macOS, and Android download, credits, and CTA with
    `visuals/04-open-source.png`.
 
@@ -15,3 +15,8 @@ publication copy is in [`THREAD_EN.md`](THREAD_EN.md). Release notes are in
 
 Before publication, review the Russian and English copy, attach the main demo
 video to post 1, and pair posts 2–4 with their static visuals.
+
+The product screenshots in posts 2 and 3 were captured from v0.2.6 using a
+temporary demo profile. The mole photo is cropped from the public-domain
+National Cancer Institute image
+[`Normal mole (1)`](https://commons.wikimedia.org/wiki/File:Normal_mole_(1).jpg).

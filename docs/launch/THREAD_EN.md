@@ -1,57 +1,58 @@
 # DermWatch launch thread — English publication copy
 
-Attach the main product-demo video to post 1. Pair posts 2–4 with the static
-visuals listed below.
+Publish as a four-post thread. Attach the finished product demo to post 1 and
+the listed images to posts 2–4.
 
-## Post 1 — demo
+## Post 1 — pain, solution and video
 
-One mole → a repeatable history of visible changes on your device.
+Most people photograph a mole once — then a month later they cannot remember what changed.
 
-DermWatch saves a baseline photo, helps you repeat the shot later, and measures
-visible differences.
+DermWatch turns separate photos into a local history: save a baseline, repeat the shot and review visible differences.
 
-[LOCAL APP] [NO CLOUD]
+Windows, macOS and Android. No account or cloud upload.
 
-Demo below_
+Media: finished product demo video.
 
-## Post 2 — workflow
+## Post 2 — value from one photo
 
-The workflow:
+You get useful feedback from the first photo.
 
-> create a record
-> add a baseline photo
-> repeat the shot later
-> compare shape, border, and color
+DermWatch checks capture quality, then shows photo-only measures for shape, border, color and entered size.
 
-No account. No cloud upload. Photos stay on your device.
+If the image is unreliable, it asks for a retake instead of inventing a confident result.
 
-Visual: `02-workflow.png`.
+Media: `visuals/02-workflow.png`.
 
-## Post 3 — limitations
+## Post 3 — guardrails against false change
 
-The honest limitation: DermWatch does not detect or rule out skin cancer or
-melanoma. It cannot confirm that a spot is benign.
+A second photo is useful only when the capture conditions are comparable.
 
-There is no LLM or pretrained medical model inside — only experimental local
-computer-vision heuristics.
+The app checks spot identity, light, angle, distance and sharpness. Same-day shots are treated as retakes, and unreliable comparisons are blocked.
 
-New, growing, itching, or bleeding spot → see a clinician.
+That means fewer false “worse” results caused by the camera.
 
-Visual: `03-transparency.png`.
+Media: `visuals/03-transparency.png`.
 
-## Post 4 — download and credits
+## Post 4 — platforms, safety and credits
 
-Free + open source.
+Free and open source
 
-Windows + macOS + Android:
+Windows + macOS + Android
 https://github.com/amirmushichge/dermwatch/releases/latest
 
-Adaptation: [@youraipulse](https://x.com/youraipulse) ×
-[@AmirMushich](https://x.com/AmirMushich)
+Local. No account. Not a diagnosis or cancer-risk score
 
-Inspired by OpenDerm from
-[@marionlepert](https://x.com/marionlepert).
+Adaptation: @youraipulse × @AmirMushich
+Inspired by OpenDerm / @marionlepert
 
-Download. Run locally. Keep a repeatable record_
+Media: `visuals/04-open-source.png`.
 
-Visual: `04-open-source.png`.
+## Important note
+
+DermWatch does not detect or rule out skin cancer or melanoma and cannot confirm
+that a spot is benign. New, changing, itching or bleeding spots should be
+assessed by a qualified clinician.
+
+The demonstration photo is cropped from a National Cancer Institute
+public-domain image published on Wikimedia Commons.
+
