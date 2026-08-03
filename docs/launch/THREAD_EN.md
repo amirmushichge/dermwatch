@@ -3,33 +3,35 @@
 Publish as a four-post thread. Attach the finished product demo to post 1 and
 the listed images to posts 2–4.
 
-## Post 1 — pain, solution and video
+## Post 1 — risk, solution and video
 
-Most people photograph a mole once — then a month later they cannot remember what changed.
+A mole can change for months without you noticing the difference.
 
-DermWatch turns separate photos into a local history: save a baseline, repeat the shot and review visible differences.
+DermWatch checks photos for visual ABCDE warning signs associated with melanoma risk and shows when a spot is worth checking with a dermatologist.
 
-Windows, macOS and Android. No account or cloud upload.
+One photo gives a preliminary check. Follow-ups track change.
 
 Media: finished product demo video.
 
-## Post 2 — value from one photo
+## Post 2 — signs in one photo
 
-You get useful feedback from the first photo.
+What DermWatch checks in one photo:
 
-DermWatch checks capture quality, then shows photo-only measures for shape, border, color and entered size.
+> asymmetry
+> border irregularity
+> color variation
+> diameter
+> photo quality
 
-If the image is unreliable, it asks for a retake instead of inventing a confident result.
+A higher value means the visual sign is more pronounced and deserves attention. It is not a cancer probability or diagnosis.
 
 Media: `visuals/02-workflow.png`.
 
-## Post 3 — guardrails against false change
+## Post 3 — change over time
 
-A second photo is useful only when the capture conditions are comparable.
+The most important warning sign is change over time.
 
-The app checks spot identity, light, angle, distance and sharpness. Same-day shots are treated as retakes, and unreliable comparisons are blocked.
-
-That means fewer false “worse” results caused by the camera.
+DermWatch saves the first image as a baseline and compares later photos. If light, angle, scale or sharpness do not match, it asks for a retake instead of reporting false deterioration.
 
 Media: `visuals/03-transparency.png`.
 
@@ -38,12 +40,12 @@ Media: `visuals/03-transparency.png`.
 Free and open source
 
 Windows + macOS + Android
-https://github.com/amirmushichge/dermwatch/releases/latest
+https://github.com/amirmushichge/dermwatch
 
-Local. No account. Not a diagnosis or cancer-risk score
+Checks visual signs associated with skin-cancer risk. It does not replace a doctor or provide a diagnosis.
 
 Adaptation: @youraipulse × @AmirMushich
-Inspired by OpenDerm / @marionlepert
+Idea: OpenDerm / @marionlepert
 
 Media: `visuals/04-open-source.png`.
 
@@ -55,4 +57,3 @@ assessed by a qualified clinician.
 
 The demonstration photo is cropped from a National Cancer Institute
 public-domain image published on Wikimedia Commons.
-
